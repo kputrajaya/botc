@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>BOTC</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css" />
+    <style>
+      a {
+        cursor: pointer;
+      }
+      button,
+      select {
+        font-size: 0.875rem;
+      }
+      fieldset[role='group'] > * {
+        width: auto;
+        flex: initial;
+      }
+      fieldset[role='group'] > .flex-grow {
+        flex-grow: 1;
+      }
+
+      .marker-list {
+        margin-top: calc(var(--pico-spacing) * -1);
+        font-size: 0;
+      }
+      .marker-list kbd {
+        margin: calc(var(--pico-spacing) * 0.5) calc(var(--pico-spacing) * 0.5) 0 0;
+        font-size: 0.765rem;
+        font-weight: normal;
+        cursor: pointer;
+      }
+    </style>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  </head>
+
+  <body>
+    <main class="container" x-data="botc">
+      <h2>Pocket Grimoire</h2>
+      <section>
+        <details>
+          <summary>Info</summary>
+          <article>
+            <div>
+              <div><strong>Role counts</strong>:</div>
+              <ol>
+                <li>Townsfolk: <span x-text="roleCounts[0]"></span></li>
+                <li>Outsider: <span x-text="roleCounts[1]"></span></li>
+                <li>Minion: <span x-text="roleCounts[2]"></span></li>
+                <li>Demon: <span x-text="roleCounts[3]"></span></li>
+              </ol>
+            </div>
+            <div x-show="activeFirstNight.length > 0">
+              <div><strong>First night actions</strong>:</div>
+              <ol>
+                <template x-for="role in activeFirstNight">
+                  <li x-text="role"></li>
+                </template>
+              </ol>
+            </div>
+            <div x-show="activeOtherNights.length > 0">
+              <div><strong>Other nights actions</strong>:</div>
+              <ol>
+                <template x-for="role in activeOtherNights">
+                  <li x-text="role"></li>
+                </template>
+              </ol>
+            </div>
+            <div><strong>Required votes</strong>: <span x-text="requiredVotes"></span></div>
+            <div><a @click="reset()">Reset game</a></div>
+          </article>
+        </details>
+      </section>
+      <template x-for="(player, index) in data.players">
+        <section>
+          <fieldset role="group">
+            <button class="secondary" disabled>
+              <strong>P<span x-text="index + 1"></span></strong>
+            </button>
+            <select x-model="player.status">
+              <option value="alive">&#128104;</option>
+              <option value="dead_vote">&#128128;</option>
+              <option value="dead_no_vote">&#10060;</option>
+            </select>
+            <select class="flex-grow" x-model="player.role" @change="cleanMarkers()">
+              <option>Choose role...</option>
+              <optgroup label="Townsfolk">
+                <template x-for="role in set.roles.townsfolk">
+                  <option :value="role" :selected="player.role === role" x-text="role"></option>
+                </template>
+              </optgroup>
+              <optgroup label="Outsider">
+                <template x-for="role in set.roles.outsider">
+                  <option :value="role" :selected="player.role === role" x-text="role"></option>
+                </template>
+              </optgroup>
+              <optgroup label="Minion">
+                <template x-for="role in set.roles.minion">
+                  <option :value="role" :selected="player.role === role" x-text="role"></option>
+                </template>
+              </optgroup>
+              <optgroup label="Demon">
+                <template x-for="role in set.roles.demon">
+                  <option :value="role" :selected="player.role === role" x-text="role"></option>
+                </template>
+              </optgroup>
+            </select>
+            <select x-model="player.addedMarker" @change="addMarker(player)">
+              <option>Add marker...</option>
+              <template x-for="marker in availableMarkers">
+                <option :value="marker" x-text="marker"></option>
+              </template>
+            </select>
+          </fieldset>
+          <small class="marker-list">
+            <template x-for="marker in player.markers">
+              <kbd x-text="marker" @click="removeMarker(player, marker)" title="Remove marker"></kbd>
+            </template>
+          </small>
+        </section>
+      </template>
+    </main>
+
+    <script>
+      const PLAYER_MODEL = {
+        status: 'alive',
+        role: null,
+        markers: [],
+        addedMarker: null,
+      };
+      const ROLE_COUNT = {
+        7: [5, 0, 1, 1],
+        8: [5, 1, 1, 1],
+        9: [5, 2, 1, 1],
+        10: [7, 0, 2, 1],
+        11: [7, 1, 2, 1],
+        12: [7, 2, 2, 1],
+        13: [9, 0, 3, 1],
+        14: [9, 1, 3, 1],
+        15: [9, 2, 3, 1],
+      };
+      const TB = {
+        roles: {
+          townsfolk: [
+            'Washerwoman',
+            'Librarian',
+            'Investigator',
+            'Chef',
+            'Empath',
+            'Fortune Teller',
+            'Undertaker',
+            'Monk',
+            'Ravenkeeper',
+            'Virgin',
+            'Slayer',
+            'Soldier',
+            'Mayor',
+          ],
+          outsider: ['Butler', 'Saint', 'Recluse'],
+          minion: ['Poisoner', 'Spy', 'Baron', 'Scarlet Woman'],
+          demon: ['Imp'],
+        },
+        markers: {
+          '': ['#', 'Drunk', 'Demon'],
+          Washerwoman: ['Townsfolk', 'Decoy'],
+          Librarian: ['Outsider', 'Decoy'],
+          Investigator: ['Minion', 'Decoy'],
+          'Fortune Teller': ['Decoy'],
+          Undertaker: ['Executed'],
+          Monk: ['Protected'],
+          Virgin: ['Used'],
+          Slayer: ['Used'],
+          Butler: ['Master'],
+          Poisoner: ['Poisoned'],
+        },
+        firstNight: [
+          'Poisoner',
+          'Spy',
+          'Washerwoman',
+          'Librarian',
+          'Investigator',
+          'Chef',
+          'Empath',
+          'Fortune Teller',
+          'Butler',
+        ],
+        otherNights: [
+          'Poisoner',
+          'Monk',
+          'Spy',
+          'Scarlet Woman',
+          'Imp',
+          'Ravenkeeper',
+          'Undertaker',
+          'Empath',
+          'Fortuner Teller',
+          'Butler',
+        ],
+      };
+
+      document.addEventListener('alpine:init', () => {
+        Alpine.data('botc', function () {
+          return {
+            set: TB,
+            data: this.$persist({
+              players: [],
+            }),
+
+            // Computed
+            get chosenRoles() {
+              return new Set(this.data.players.map((p) => p.role));
+            },
+            get roleCounts() {
+              return ROLE_COUNT[this.data.players.length] || null;
+            },
+            get requiredVotes() {
+              return Math.ceil(this.data.players.filter((p) => p.status === 'alive').length / 2);
+            },
+            get activeFirstNight() {
+              const chosenRoles = this.chosenRoles;
+              return this.set.firstNight.filter((r) => chosenRoles.has(r));
+            },
+            get activeOtherNights() {
+              const chosenRoles = this.chosenRoles;
+              return this.set.otherNights.filter((r) => chosenRoles.has(r));
+            },
+            get availableMarkers() {
+              const chosenRoles = this.chosenRoles;
+              return Object.keys(this.set.markers)
+                .filter((r) => r === '' || chosenRoles.has(r))
+                .flatMap((r) => this.set.markers[r].map((m) => (r ? r + ' - ' : '') + m));
+            },
+
+            // Method
+            addMarker(player) {
+              const marker = player.addedMarker;
+              player.addedMarker = null;
+              if (!marker || player.markers.indexOf(marker) >= 0) return;
+              if (marker !== '#') {
+                this.data.players.forEach((p) => {
+                  p.markers = p.markers.filter((m) => m !== marker);
+                });
+              }
+              player.markers.push(marker);
+            },
+            removeMarker(player, marker) {
+              player.markers = player.markers.filter((m) => m !== marker);
+            },
+            cleanMarkers() {
+              const availableMarkers = new Set(this.availableMarkers);
+              this.data.players.forEach((p) => {
+                p.markers = p.markers.filter((m) => availableMarkers.has(m));
+              });
+            },
+            reset() {
+              if (!confirm('Reset game and clear all data?')) return;
+              this.data = {
+                players: [],
+              };
+              window.location.reload();
+            },
+
+            // Initialization
+            init() {
+              if (this.data.players.length === 0) {
+                let playerCount = 0;
+                while (!(playerCount >= 7 && playerCount <= 15)) {
+                  playerCount = Math.floor(prompt('How many players? (7-15)'));
+                }
+                const playerModelJson = JSON.stringify(PLAYER_MODEL);
+                for (let i = 0; i < playerCount; i++) {
+                  this.data.players.push(JSON.parse(playerModelJson));
+                }
+              }
+            },
+          };
+        });
+      });
+    </script>
+  </body>
+</html>
