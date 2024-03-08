@@ -22,6 +22,7 @@
       }
       .player > button {
         padding: 0 var(--pico-spacing);
+        font-weight: 700;
         opacity: 1;
       }
       .player > .choose-role {
@@ -85,11 +86,11 @@
         <template x-for="(player, index) in data.players">
           <section>
             <fieldset class="player" role="group">
-              <button class="secondary" disabled>P<span x-text="index + 1"></span></button>
+              <button class="secondary" disabled x-text="index + 1"></button>
               <select x-model="player.status">
-                <option value="alive">&#128104;</option>
+                <option value="alive">&#128516;</option>
                 <option value="dead_vote">&#128128;</option>
-                <option value="dead_no_vote">&#10060;</option>
+                <option value="dead_no_vote">&#128683;</option>
               </select>
               <select class="choose-role" x-model="player.role" @change="cleanMarkers()">
                 <option>Choose role...</option>
