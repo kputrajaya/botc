@@ -172,7 +172,7 @@
           demon: ['Imp'],
         },
         markers: {
-          '': ['#', 'Drunk', 'Demon'],
+          '': ['+', 'Drunk', 'Demon'],
           Washerwoman: ['Townsfolk', 'Decoy'],
           Librarian: ['Outsider', 'Decoy'],
           Investigator: ['Minion', 'Decoy'],
@@ -250,7 +250,7 @@
               const marker = player.addedMarker;
               player.addedMarker = null;
               if (!marker || player.markers.indexOf(marker) >= 0) return;
-              if (marker !== '#') {
+              if (marker !== '+') {
                 this.data.players.forEach((p) => {
                   p.markers = p.markers.filter((m) => m !== marker);
                 });
