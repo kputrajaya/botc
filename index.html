@@ -15,19 +15,27 @@
       select {
         font-size: 0.875rem;
       }
-      fieldset[role='group'] > * {
+
+      .player > * {
         width: auto;
-        flex: initial;
+        flex: initial !important;
       }
-      fieldset[role='group'] > .flex-grow {
-        flex-grow: 1;
+      .player > button {
+        padding: 0 var(--pico-spacing);
+        opacity: 1;
+      }
+      .player > .choose-role {
+        flex-grow: 1 !important;
+      }
+      .player > .add-marker {
+        width: 10em;
       }
 
-      .marker-list {
+      .markers {
         margin-top: calc(var(--pico-spacing) * -1);
         font-size: 0;
       }
-      .marker-list kbd {
+      .markers kbd {
         margin: calc(var(--pico-spacing) * 0.5) calc(var(--pico-spacing) * 0.5) 0 0;
         font-size: 0.765rem;
         font-weight: normal;
@@ -46,84 +54,81 @@
         <details>
           <summary>Info</summary>
           <article>
-            <div>
-              <div><strong>Role counts</strong>:</div>
-              <ol>
-                <li>Townsfolk: <span x-text="roleCounts[0]"></span></li>
-                <li>Outsider: <span x-text="roleCounts[1]"></span></li>
-                <li>Minion: <span x-text="roleCounts[2]"></span></li>
-                <li>Demon: <span x-text="roleCounts[3]"></span></li>
-              </ol>
-            </div>
-            <div x-show="activeFirstNight.length > 0">
+            <section>
+              <strong>Character counts</strong>: <span x-text="charCounts">
+            </section>
+            <section>
+              <strong>Required votes</strong>: <span x-text="requiredVotes"></span> /
+              <span x-text="alivePlayers"></span>
+            </section>
+            <section x-show="activeFirstNight.length > 0">
               <div><strong>First night actions</strong>:</div>
               <ol>
                 <template x-for="role in activeFirstNight">
                   <li x-text="role"></li>
                 </template>
               </ol>
-            </div>
-            <div x-show="activeOtherNights.length > 0">
+            </section>
+            <section x-show="activeOtherNights.length > 0">
               <div><strong>Other nights actions</strong>:</div>
               <ol>
                 <template x-for="role in activeOtherNights">
                   <li x-text="role"></li>
                 </template>
               </ol>
-            </div>
-            <div><strong>Required votes</strong>: <span x-text="requiredVotes"></span></div>
+            </section>
             <div><a @click="reset()">Reset game</a></div>
           </article>
         </details>
       </section>
-      <template x-for="(player, index) in data.players">
-        <section>
-          <fieldset role="group">
-            <button class="secondary" disabled>
-              <strong>P<span x-text="index + 1"></span></strong>
-            </button>
-            <select x-model="player.status">
-              <option value="alive">&#128104;</option>
-              <option value="dead_vote">&#128128;</option>
-              <option value="dead_no_vote">&#10060;</option>
-            </select>
-            <select class="flex-grow" x-model="player.role" @change="cleanMarkers()">
-              <option>Choose role...</option>
-              <optgroup label="Townsfolk">
-                <template x-for="role in set.roles.townsfolk">
-                  <option :value="role" :selected="player.role === role" x-text="role"></option>
+      <div class="overflow-auto">
+        <template x-for="(player, index) in data.players">
+          <section>
+            <fieldset class="player" role="group">
+              <button class="secondary" disabled>P<span x-text="index + 1"></span></button>
+              <select x-model="player.status">
+                <option value="alive">&#128104;</option>
+                <option value="dead_vote">&#128128;</option>
+                <option value="dead_no_vote">&#10060;</option>
+              </select>
+              <select class="choose-role" x-model="player.role" @change="cleanMarkers()">
+                <option>Choose role...</option>
+                <optgroup label="Townsfolk">
+                  <template x-for="role in set.roles.townsfolk">
+                    <option :value="role" :selected="player.role === role" x-text="role"></option>
+                  </template>
+                </optgroup>
+                <optgroup label="Outsider">
+                  <template x-for="role in set.roles.outsider">
+                    <option :value="role" :selected="player.role === role" x-text="role"></option>
+                  </template>
+                </optgroup>
+                <optgroup label="Minion">
+                  <template x-for="role in set.roles.minion">
+                    <option :value="role" :selected="player.role === role" x-text="role"></option>
+                  </template>
+                </optgroup>
+                <optgroup label="Demon">
+                  <template x-for="role in set.roles.demon">
+                    <option :value="role" :selected="player.role === role" x-text="role"></option>
+                  </template>
+                </optgroup>
+              </select>
+              <select class="add-marker" x-model="player.addedMarker" @change="addMarker(player)">
+                <option>Add marker...</option>
+                <template x-for="marker in availableMarkers">
+                  <option :value="marker" x-text="marker"></option>
                 </template>
-              </optgroup>
-              <optgroup label="Outsider">
-                <template x-for="role in set.roles.outsider">
-                  <option :value="role" :selected="player.role === role" x-text="role"></option>
-                </template>
-              </optgroup>
-              <optgroup label="Minion">
-                <template x-for="role in set.roles.minion">
-                  <option :value="role" :selected="player.role === role" x-text="role"></option>
-                </template>
-              </optgroup>
-              <optgroup label="Demon">
-                <template x-for="role in set.roles.demon">
-                  <option :value="role" :selected="player.role === role" x-text="role"></option>
-                </template>
-              </optgroup>
-            </select>
-            <select x-model="player.addedMarker" @change="addMarker(player)">
-              <option>Add marker...</option>
-              <template x-for="marker in availableMarkers">
-                <option :value="marker" x-text="marker"></option>
+              </select>
+            </fieldset>
+            <small class="markers">
+              <template x-for="marker in player.markers">
+                <kbd x-text="marker" @click="removeMarker(player, marker)" title="Remove marker"></kbd>
               </template>
-            </select>
-          </fieldset>
-          <small class="marker-list">
-            <template x-for="marker in player.markers">
-              <kbd x-text="marker" @click="removeMarker(player, marker)" title="Remove marker"></kbd>
-            </template>
-          </small>
-        </section>
-      </template>
+            </small>
+          </section>
+        </template>
+      </div>
     </main>
 
     <script>
@@ -133,7 +138,7 @@
         markers: [],
         addedMarker: null,
       };
-      const ROLE_COUNT = {
+      const CHAR_COUNT = {
         7: [5, 0, 1, 1],
         8: [5, 1, 1, 1],
         9: [5, 2, 1, 1],
@@ -215,11 +220,14 @@
             get chosenRoles() {
               return new Set(this.data.players.map((p) => p.role));
             },
-            get roleCounts() {
-              return ROLE_COUNT[this.data.players.length] || null;
+            get charCounts() {
+              return (CHAR_COUNT[this.data.players.length] || []).join('-');
+            },
+            get alivePlayers() {
+              return this.data.players.filter((p) => p.status === 'alive').length;
             },
             get requiredVotes() {
-              return Math.ceil(this.data.players.filter((p) => p.status === 'alive').length / 2);
+              return Math.ceil(this.alivePlayers / 2);
             },
             get activeFirstNight() {
               const chosenRoles = this.chosenRoles;
