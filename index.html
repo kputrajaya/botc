@@ -11,13 +11,10 @@
       a {
         cursor: pointer;
       }
-      button,
-      select {
-        font-size: 0.875rem;
-      }
 
       .player > * {
         width: auto;
+        font-size: 0.875rem;
         flex: initial !important;
       }
       .player > button {
@@ -36,10 +33,10 @@
         margin-top: calc(var(--pico-spacing) * -1);
         font-size: 0;
       }
-      .markers kbd {
+      .markers > kbd {
         margin: calc(var(--pico-spacing) * 0.5) calc(var(--pico-spacing) * 0.5) 0 0;
         font-size: 0.765rem;
-        font-weight: normal;
+        font-weight: 400;
         cursor: pointer;
       }
     </style>
@@ -50,7 +47,7 @@
 
   <body>
     <main class="container" x-data="botc">
-      <h2>Pocket Grimoire</h2>
+      <h3>Pocket Grimoire</h3>
       <section>
         <details>
           <summary>Info</summary>
@@ -65,6 +62,8 @@
             <section x-show="activeFirstNight.length > 0">
               <div><strong>First night actions</strong>:</div>
               <ol>
+                <li><a @click="promptMinion()">Minion info</a></li>
+                <li><a @click="promptDemon()">Demon info</a></li>
                 <template x-for="role in activeFirstNight">
                   <li x-text="role"></li>
                 </template>
@@ -78,7 +77,7 @@
                 </template>
               </ol>
             </section>
-            <div><a @click="reset()">Reset game</a></div>
+            <div><a @click="reset()">End game</a></div>
           </article>
         </details>
       </section>
@@ -267,11 +266,29 @@
               });
             },
             reset() {
-              if (!confirm('Reset game and clear all data?')) return;
+              if (!confirm('End game and reset all data?')) return;
               this.data = {
                 players: [],
               };
               window.location.reload();
+            },
+            findPlayersInGroup(roles) {
+              const roleSet = new Set(roles);
+              const result = [];
+              this.data.players.forEach((p, index) => {
+                if (roleSet.has(p.role)) {
+                  result.push(index + 1);
+                };
+              });
+              return result;
+            },
+            promptMinion() {
+              const players = this.findPlayersInGroup(this.set.roles.demon);
+              alert(`The Demon: ${players.join(', ')}`);
+            },
+            promptDemon() {
+              const players = this.findPlayersInGroup(this.set.roles.minion);
+              alert(`Your minions: ${players.join(', ')}\nNot in play: X, Y, Z`);
             },
 
             // Initialization
