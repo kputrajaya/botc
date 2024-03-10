@@ -1,3 +1,7 @@
+* {
+  box-shadow: none !important;
+}
+
 a {
   cursor: pointer;
 }
@@ -32,7 +36,17 @@ a {
 .player > button {
   padding: 0 var(--pico-spacing);
   font-weight: 700;
+  background: #646B79;
+  border: 0;
   opacity: 1;
+}
+.player > button.townsfolk,
+.player > button.outsider {
+  background: #0172AD;
+}
+.player > button.minion,
+.player > button.demon {
+  background: #C72259;
 }
 .player > .choose-role {
   flex-grow: 1 !important;
