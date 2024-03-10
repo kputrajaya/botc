@@ -137,7 +137,7 @@
                 <button ton class="w-full" @click="promptRole()">Role info</button>
               </section>
               <select class="choose-role mb-0" x-model="data.prompter.roleInfo">
-                <option value="">Choose role...</option>
+                <option value="">Role to show...</option>
                 <optgroup label="Townsfolk">
                   <template x-for="role in set.roles.townsfolk">
                     <option :value="role" :selected="data.prompter.roleInfo === role" x-text="role"></option>
