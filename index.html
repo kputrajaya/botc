@@ -7,50 +7,18 @@
     <title>Pocket Grimoire</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css" />
-    <style>
-      a {
-        cursor: pointer;
-      }
+    <link rel="stylesheet" href="site.css" />
 
-      .player > * {
-        width: auto;
-        font-size: 0.875rem;
-        flex: initial !important;
-      }
-      .player > button {
-        padding: 0 var(--pico-spacing);
-        font-weight: 700;
-        opacity: 1;
-      }
-      .player > .choose-role {
-        flex-grow: 1 !important;
-      }
-      .player > .add-marker {
-        width: 10em;
-      }
-
-      .markers {
-        margin-top: calc(var(--pico-spacing) * -1);
-        font-size: 0;
-      }
-      .markers > kbd {
-        margin: calc(var(--pico-spacing) * 0.5) calc(var(--pico-spacing) * 0.5) 0 0;
-        font-size: 0.765rem;
-        font-weight: 400;
-        cursor: pointer;
-      }
-    </style>
-
-    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="site.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
   </head>
 
-  <body>
-    <main class="container" x-data="botc">
-      <h3>Pocket Grimoire</h3>
+  <body x-data="botc" x-cloak>
+    <main class="container">
       <section>
         <details>
-          <summary>Info</summary>
+          <summary class="title"><h1>&#128216; Pocket Grimoire</h1></summary>
           <article>
             <section>
               <strong>Character counts</strong>: <span x-text="charCounts">
@@ -59,23 +27,23 @@
               <strong>Required votes</strong>: <span x-text="requiredVotes"></span> /
               <span x-text="alivePlayers"></span>
             </section>
-            <section x-show="activeFirstNight.length > 0">
-              <div><strong>First night actions</strong>:</div>
-              <ol>
-                <li><a @click="promptMinion()">Minion info</a></li>
-                <li><a @click="promptDemon()">Demon info</a></li>
-                <template x-for="role in activeFirstNight">
+            <section>
+              <div><strong>First night order</strong>:</div>
+              <ul>
+                <li>(Minion info)</li>
+                <li>(Demon info)</li>
+                <template x-for="role in firstNightOrder">
                   <li x-text="role"></li>
                 </template>
-              </ol>
+              </ul>
             </section>
-            <section x-show="activeOtherNights.length > 0">
-              <div><strong>Other nights actions</strong>:</div>
-              <ol>
-                <template x-for="role in activeOtherNights">
+            <section x-show="otherNightsOrder.length > 0">
+              <div><strong>Other nights order</strong>:</div>
+              <ul>
+                <template x-for="role in otherNightsOrder">
                   <li x-text="role"></li>
                 </template>
-              </ol>
+              </ul>
             </section>
             <div><a @click="reset()">End game</a></div>
           </article>
@@ -91,8 +59,8 @@
                 <option value="dead_vote">&#128128;</option>
                 <option value="dead_no_vote">&#128683;</option>
               </select>
-              <select class="choose-role" x-model="player.role" @change="cleanMarkers()">
-                <option>Choose role...</option>
+              <select class="choose-role" x-model="player.role" @change="changeRole(player)">
+                <option value="">Choose role...</option>
                 <optgroup label="Townsfolk">
                   <template x-for="role in set.roles.townsfolk">
                     <option :value="role" :selected="player.role === role" x-text="role"></option>
@@ -115,7 +83,7 @@
                 </optgroup>
               </select>
               <select class="add-marker" x-model="player.addedMarker" @change="addMarker(player)">
-                <option>Add marker...</option>
+                <option value="">Add marker...</option>
                 <template x-for="marker in availableMarkers">
                   <option :value="marker" x-text="marker"></option>
                 </template>
@@ -129,184 +97,80 @@
           </section>
         </template>
       </div>
+      <div class="text-center"><a @click="togglePrompter()">Go to prompter</a></div>
     </main>
 
-    <script>
-      const PLAYER_MODEL = {
-        status: 'alive',
-        role: null,
-        markers: [],
-        addedMarker: null,
-      };
-      const CHAR_COUNT = {
-        7: [5, 0, 1, 1],
-        8: [5, 1, 1, 1],
-        9: [5, 2, 1, 1],
-        10: [7, 0, 2, 1],
-        11: [7, 1, 2, 1],
-        12: [7, 2, 2, 1],
-        13: [9, 0, 3, 1],
-        14: [9, 1, 3, 1],
-        15: [9, 2, 3, 1],
-      };
-      const TB = {
-        roles: {
-          townsfolk: [
-            'Washerwoman',
-            'Librarian',
-            'Investigator',
-            'Chef',
-            'Empath',
-            'Fortune Teller',
-            'Undertaker',
-            'Monk',
-            'Ravenkeeper',
-            'Virgin',
-            'Slayer',
-            'Soldier',
-            'Mayor',
-          ],
-          outsider: ['Butler', 'Saint', 'Recluse'],
-          minion: ['Poisoner', 'Spy', 'Baron', 'Scarlet Woman'],
-          demon: ['Imp'],
-        },
-        markers: {
-          '': ['+', 'Drunk', 'Demon'],
-          Washerwoman: ['Townsfolk', 'Decoy'],
-          Librarian: ['Outsider', 'Decoy'],
-          Investigator: ['Minion', 'Decoy'],
-          'Fortune Teller': ['Decoy'],
-          Undertaker: ['Executed'],
-          Monk: ['Protected'],
-          Virgin: ['Used'],
-          Slayer: ['Used'],
-          Butler: ['Master'],
-          Poisoner: ['Poisoned'],
-        },
-        firstNight: [
-          'Poisoner',
-          'Spy',
-          'Washerwoman',
-          'Librarian',
-          'Investigator',
-          'Chef',
-          'Empath',
-          'Fortune Teller',
-          'Butler',
-        ],
-        otherNights: [
-          'Poisoner',
-          'Monk',
-          'Spy',
-          'Scarlet Woman',
-          'Imp',
-          'Ravenkeeper',
-          'Undertaker',
-          'Empath',
-          'Fortuner Teller',
-          'Butler',
-        ],
-      };
-
-      document.addEventListener('alpine:init', () => {
-        Alpine.data('botc', function () {
-          return {
-            set: TB,
-            data: this.$persist({
-              players: [],
-            }),
-
-            // Computed
-            get chosenRoles() {
-              return new Set(this.data.players.map((p) => p.role));
-            },
-            get charCounts() {
-              return (CHAR_COUNT[this.data.players.length] || []).join('-');
-            },
-            get alivePlayers() {
-              return this.data.players.filter((p) => p.status === 'alive').length;
-            },
-            get requiredVotes() {
-              return Math.ceil(this.alivePlayers / 2);
-            },
-            get activeFirstNight() {
-              const chosenRoles = this.chosenRoles;
-              return this.set.firstNight.filter((r) => chosenRoles.has(r));
-            },
-            get activeOtherNights() {
-              const chosenRoles = this.chosenRoles;
-              return this.set.otherNights.filter((r) => chosenRoles.has(r));
-            },
-            get availableMarkers() {
-              const chosenRoles = this.chosenRoles;
-              return Object.keys(this.set.markers)
-                .filter((r) => r === '' || chosenRoles.has(r))
-                .flatMap((r) => this.set.markers[r].map((m) => (r ? r + ' - ' : '') + m));
-            },
-
-            // Method
-            addMarker(player) {
-              const marker = player.addedMarker;
-              player.addedMarker = null;
-              if (!marker || player.markers.indexOf(marker) >= 0) return;
-              if (marker !== '+') {
-                this.data.players.forEach((p) => {
-                  p.markers = p.markers.filter((m) => m !== marker);
-                });
-              }
-              player.markers.push(marker);
-            },
-            removeMarker(player, marker) {
-              player.markers = player.markers.filter((m) => m !== marker);
-            },
-            cleanMarkers() {
-              const availableMarkers = new Set(this.availableMarkers);
-              this.data.players.forEach((p) => {
-                p.markers = p.markers.filter((m) => availableMarkers.has(m));
-              });
-            },
-            reset() {
-              if (!confirm('End game and reset all data?')) return;
-              this.data = {
-                players: [],
-              };
-              window.location.reload();
-            },
-            findPlayersInGroup(roles) {
-              const roleSet = new Set(roles);
-              const result = [];
-              this.data.players.forEach((p, index) => {
-                if (roleSet.has(p.role)) {
-                  result.push(index + 1);
-                };
-              });
-              return result;
-            },
-            promptMinion() {
-              const players = this.findPlayersInGroup(this.set.roles.demon);
-              alert(`The Demon: ${players.join(', ')}`);
-            },
-            promptDemon() {
-              const players = this.findPlayersInGroup(this.set.roles.minion);
-              alert(`Your minions: ${players.join(', ')}\nNot in play: X, Y, Z`);
-            },
-
-            // Initialization
-            init() {
-              if (this.data.players.length === 0) {
-                let playerCount = 0;
-                while (!(playerCount >= 7 && playerCount <= 15)) {
-                  playerCount = Math.floor(prompt('How many players? (7-15)'));
-                }
-                const playerModelJson = JSON.stringify(PLAYER_MODEL);
-                for (let i = 0; i < playerCount; i++) {
-                  this.data.players.push(JSON.parse(playerModelJson));
-                }
-              }
-            },
-          };
-        });
-      });
-    </script>
+    <div class="prompter" x-show="data.prompter.active">
+      <main class="container">
+        <div class="grid">
+          <div><article><button class="w-full" @click="promptMinion()">Minion info</button></article></div>
+          <div>
+            <article>
+              <section>
+                <button class="w-full" @click="promptDemon()">Demon info</button>
+              </section>
+              <select x-model="data.prompter.notInPlay[0]">
+                <option value="">Not in play...</option>
+                <template x-for="role in townsfolkNotInPlay">
+                  <option :value="role" :selected="data.prompter.notInPlay[0] === role" x-text="role"></option>
+                </template>
+              </select>
+              <select x-model="data.prompter.notInPlay[1]">
+                <option value="">Not in play...</option>
+                <template x-for="role in townsfolkNotInPlay">
+                  <option :value="role" :selected="data.prompter.notInPlay[1] === role" x-text="role"></option>
+                </template>
+              </select>
+              <select class="mb-0" x-model="data.prompter.notInPlay[2]">
+                <option value="">Not in play...</option>
+                <template x-for="role in townsfolkNotInPlay">
+                  <option :value="role" :selected="data.prompter.notInPlay[2] === role" x-text="role"></option>
+                </template>
+              </select>
+            </article>
+          </div>
+        </div>
+        <div class="grid">
+          <div>
+            <article>
+              <section>
+                <button ton class="w-full" @click="promptRole()">Role info</button>
+              </section>
+              <select class="choose-role mb-0" x-model="data.prompter.roleInfo">
+                <option value="">Choose role...</option>
+                <optgroup label="Townsfolk">
+                  <template x-for="role in set.roles.townsfolk">
+                    <option :value="role" :selected="data.prompter.roleInfo === role" x-text="role"></option>
+                  </template>
+                </optgroup>
+                <optgroup label="Outsider">
+                  <template x-for="role in set.roles.outsider">
+                    <option :value="role" :selected="data.prompter.roleInfo === role" x-text="role"></option>
+                  </template>
+                </optgroup>
+                <optgroup label="Minion">
+                  <template x-for="role in set.roles.minion">
+                    <option :value="role" :selected="data.prompter.roleInfo === role" x-text="role"></option>
+                  </template>
+                </optgroup>
+                <optgroup label="Demon">
+                  <template x-for="role in set.roles.demon">
+                    <option :value="role" :selected="data.prompter.roleInfo === role" x-text="role"></option>
+                  </template>
+                </optgroup>
+              </select>
+            </article>
+          </div>
+          <div><article><button class="w-full" @click="promptCustom()">Custom</button></article></div>
+        </div>
+        <div class="text-center"><a @click="togglePrompter()">Go back</a></div>
+      </main>
+    </div>
+    <div
+      class="prompter prompter-message"
+      x-show="data.prompter.message"
+      x-text="data.prompter.message"
+      @click="clearPrompt()"
+    ></div>
   </body>
 </html>

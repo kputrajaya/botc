@@ -1,0 +1,75 @@
+a {
+  cursor: pointer;
+}
+
+[x-cloak] {
+  display: none;
+}
+
+.w-full {
+  width: 100%;
+}
+.mb-0 {
+  margin-bottom: 0;
+}
+.text-center {
+  text-align: center;
+}
+
+.title h1 {
+  margin: 0;
+  font-size: 1.3em;
+  display: inline-block;
+}
+.title::after {
+  margin-top: 0.2em;
+}
+
+.player > * {
+  width: auto;
+  flex: initial !important;
+}
+.player > button {
+  padding: 0 var(--pico-spacing);
+  font-weight: 700;
+  opacity: 1;
+}
+.player > .choose-role {
+  flex-grow: 1 !important;
+}
+.player > .add-marker {
+  width: 10em;
+}
+
+.markers {
+  margin-top: calc(var(--pico-spacing) * -1);
+  font-size: 0;
+}
+.markers > kbd {
+  margin: calc(var(--pico-spacing) * 0.5) calc(var(--pico-spacing) * 0.5) 0 0;
+  font-size: 0.765rem;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.prompter {
+  background: var(--pico-background-color);
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.prompter-message {
+  font-size: 2.5em;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: pre-wrap;
+  color: #000;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
