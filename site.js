@@ -209,7 +209,7 @@
           const chosenRoles = this.chosenRoles;
           return Object.keys(this.set.markers)
             .filter((r) => r === '' || chosenRoles.has(r))
-            .flatMap((r) => this.set.markers[r].map((m) => (r ? r + ' - ' : '') + m));
+            .flatMap((r) => this.set.markers[r].map((m) => (r ? r.split(' ')[0].substring(0, 5) + ': ' : '') + m));
         },
         get townsfolkNotInPlay() {
           const chosenRoles = this.chosenRoles;
