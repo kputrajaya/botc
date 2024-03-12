@@ -16,6 +16,12 @@ a {
 .mb-0 {
   margin-bottom: 0;
 }
+.mb-1 {
+  margin-bottom: var(--pico-block-spacing-vertical);
+}
+.pt-1 {
+  padding-top: var(--pico-block-spacing-vertical);
+}
 .text-center {
   text-align: center;
 }
@@ -52,7 +58,7 @@ a {
   flex-grow: 1 !important;
 }
 .player > .add-marker {
-  width: 10em;
+  width: 6.5em;
 }
 
 .markers {

@@ -1,23 +1,6 @@
 (() => {
-  const DATA_MODEL = {
-    set: 'tb',
-    players: [],
-    prompter: {
-      active: false,
-      notInPlay: [null, null, null],
-      roleInfo: null,
-      message: null,
-    },
-  };
-  const PLAYER_MODEL = {
-    status: 'alive', // alive, dead_vote, dead_no_vote
-    role: null,
-    group: null,
-    markers: [],
-    addedMarker: null, // Temporary, reset every time
-  };
-  const CHAR_COUNT = {
-    7: [5, 0, 1, 1],
+  const ROLE_COUNTS = {
+    7: [5, 0, 1, 1], // Townsfolk, Outsider, Minion, Demon
     8: [5, 1, 1, 1],
     9: [5, 2, 1, 1],
     10: [7, 0, 2, 1],
@@ -45,12 +28,11 @@
           'Soldier',
           'Mayor',
         ],
-        outsider: ['Butler', 'Saint', 'Recluse'],
-        minion: ['Poisoner', 'Spy', 'Baron', 'Scarlet Woman'],
+        outsider: ['Butler', 'Recluse', 'Saint'],
+        minion: ['Poisoner', 'Spy', 'Scarlet Woman', 'Baron'],
         demon: ['Imp'],
       },
       markers: {
-        '': ['+', 'Drunk', 'Demon'],
         Washerwoman: ['Townsfolk', 'Decoy'],
         Librarian: ['Outsider', 'Decoy'],
         Investigator: ['Minion', 'Decoy'],
@@ -61,8 +43,11 @@
         Slayer: ['Used'],
         Butler: ['Master'],
         Poisoner: ['Poisoned'],
+        '': ['Drunk', 'Demon', '+'],
       },
       firstNight: [
+        '(Minion info)',
+        '(Demon info)',
         'Poisoner',
         'Spy',
         'Washerwoman',
@@ -86,6 +71,86 @@
         'Butler',
       ],
     },
+    bmr: {
+      roles: {
+        townsfolk: [
+          'Grandmother',
+          'Sailor',
+          'Chambermaid',
+          'Exorcist',
+          'Innkeeper',
+          'Gambler',
+          'Gossip',
+          'Courtier',
+          'Professor',
+          'Minstrel',
+          'Tea Lady',
+          'Pacifist',
+          'Fool',
+        ],
+        outsider: ['Tinker', 'Moonchild', 'Goon', 'Lunatic'],
+        minion: ['Godfather', "Devil's Advocate", 'Assassin', 'Mastermind'],
+        demon: ['Zombuul', 'Pukka', 'Shabaloth', 'Po'],
+      },
+      markers: {
+        '': ['Drunk', 'Demon', '+'],
+      },
+      firstNight: [
+        '(Minion info)',
+        'Lunatic',
+        '(Demon info)',
+        'Sailor',
+        'Courtier',
+        'Godfather',
+        "Devil's Advocate",
+        'Lunatic',
+        'Pukka',
+        'Grandmother',
+        'Chambermaid',
+        'Goon',
+      ],
+      otherNights: [
+        'Minstrel',
+        'Sailor',
+        'Innkeeper',
+        'Courtier',
+        'Gambler',
+        "Devil's Advocate",
+        'Lunatic',
+        'Exorcist',
+        'Zombuul',
+        'Pukka',
+        'Shabaloth',
+        'Po',
+        'Assassin',
+        'Godfather',
+        'Professor',
+        'Gossip',
+        'Tinker',
+        'Moonchild',
+        'Grandmother',
+        'Chambermaid',
+        'Goon',
+      ],
+    },
+  };
+
+  const DATA_MODEL = {
+    set: 'tb',
+    players: [],
+    prompter: {
+      active: false,
+      notInPlay: [null, null, null],
+      roleInfo: null,
+      message: null,
+    },
+  };
+  const PLAYER_MODEL = {
+    status: 'alive', // alive, dead_vote, dead_no_vote
+    role: null,
+    group: null,
+    markers: [],
+    addedMarker: null, // Temporary, reset every time
   };
 
   document.addEventListener('alpine:init', () => {
@@ -97,8 +162,8 @@
         get set() {
           return SETS[this.data.set];
         },
-        get charCounts() {
-          return CHAR_COUNT[this.data.players.length].join('-');
+        get roleCounts() {
+          return ROLE_COUNTS[this.data.players.length].join('-');
         },
         get alivePlayers() {
           return this.data.players.filter((p) => p.status === 'alive').length;
@@ -111,7 +176,7 @@
         },
         get firstNightOrder() {
           const chosenRoles = this.chosenRoles;
-          return this.set.firstNight.filter((r) => chosenRoles.has(r));
+          return this.set.firstNight.filter((r) => chosenRoles.has(r) || r.startsWith('('));
         },
         get otherNightsOrder() {
           const chosenRoles = this.chosenRoles;
@@ -132,8 +197,15 @@
         addMarker(player) {
           const marker = player.addedMarker;
           player.addedMarker = null;
-          if (!marker || player.markers.indexOf(marker) >= 0) return;
+          if (!marker) return;
 
+          // If exists, remove
+          if (player.markers.indexOf(marker) >= 0) {
+            this.removeMarker(player, marker);
+            return;
+          }
+
+          // Add marker
           if (marker !== '+') {
             this.data.players.forEach((p) => {
               p.markers = p.markers.filter((m) => m !== marker);
@@ -160,7 +232,7 @@
             p.markers = p.markers.filter((m) => availableMarkers.has(m));
           });
 
-          // Clean up invalid not-in-play
+          // Clean up invalid not-in-play prompt
           this.data.prompter.notInPlay = this.data.prompter.notInPlay.map((r) => (this.chosenRoles.has(r) ? null : r));
         },
         reset() {
@@ -174,7 +246,7 @@
         promptMinion() {
           const demonIndex = this.data.players.findIndex((p) => p.group === 'demon') + 1;
           if (!demonIndex) {
-            alert('Demon not found!');
+            alert('There is no Demon!');
             return;
           }
           this.data.prompter.message = `Demon:\n\n${demonIndex}`;
@@ -185,12 +257,12 @@
             .filter(Boolean)
             .join(', ');
           if (!minionIndexes) {
-            alert('Minions not found!');
+            alert('There are no minions!');
             return;
           }
           const notInPlay = this.data.prompter.notInPlay.filter(Boolean).join('\n');
           if (!notInPlay) {
-            alert('Not in play characters is not set!');
+            alert('Not in play roles are not set!');
             return;
           }
           this.data.prompter.message = `Minions:\n\n${minionIndexes}\n\nNot in play:\n\n${notInPlay}`;
@@ -215,7 +287,7 @@
         // Initialization
         init() {
           if (this.data.players.length === 0) {
-            let playerCount = 0;
+            let playerCount;
             while (!(playerCount >= 7 && playerCount <= 15)) {
               playerCount = Math.floor(prompt('How many players? (7-15)'));
             }

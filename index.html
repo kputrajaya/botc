@@ -18,20 +18,18 @@
     <main class="container">
       <section>
         <details>
-          <summary class="title"><h1>&#128216; Pocket Grimoire</h1></summary>
+          <summary class="title">
+            <h1>Pocket Grimoire</h1>
+          </summary>
           <article>
-            <section>
-              <strong>Character counts</strong>: <span x-text="charCounts">
-            </section>
+            <section><strong>Role counts</strong>: <span x-text="roleCounts"></span></section>
             <section>
               <strong>Required votes</strong>: <span x-text="requiredVotes"></span> /
               <span x-text="alivePlayers"></span>
             </section>
-            <section>
+            <section x-show="firstNightOrder.length > 0">
               <div><strong>First night order</strong>:</div>
               <ul>
-                <li>(Minion info)</li>
-                <li>(Demon info)</li>
                 <template x-for="role in firstNightOrder">
                   <li x-text="role"></li>
                 </template>
@@ -83,7 +81,7 @@
                 </optgroup>
               </select>
               <select class="add-marker" x-model="player.addedMarker" @change="addMarker(player)">
-                <option value="">Add marker...</option>
+                <option value="">Mark...</option>
                 <template x-for="marker in availableMarkers">
                   <option :value="marker" x-text="marker"></option>
                 </template>
@@ -101,44 +99,31 @@
     </main>
 
     <div class="prompter" x-show="data.prompter.active">
-      <main class="container">
-        <div class="grid">
-          <div><article><button class="w-full" @click="promptMinion()">Minion info</button></article></div>
+      <div class="container pt-1">
+        <h5>Prompter</h5>
+        <div class="grid mb-1">
           <div>
-            <article>
+            <article class="mb-0"><button class="w-full" @click="promptMinion()">Minion info</button></article>
+          </div>
+          <div>
+            <article class="mb-0">
               <section>
                 <button class="w-full" @click="promptDemon()">Demon info</button>
               </section>
-              <select x-model="data.prompter.notInPlay[0]">
-                <option value="">Not in play...</option>
-                <optgroup label="Townsfolk">
+              <template x-for="index in [0, 1, 2]">
+                <select x-model="data.prompter.notInPlay[index]">
+                  <option value="">Not in play...</option>
                   <template x-for="role in townsfolkNotInPlay">
-                    <option :value="role" :selected="data.prompter.notInPlay[0] === role" x-text="role"></option>
+                    <option :value="role" :selected="data.prompter.notInPlay[index] === role" x-text="role"></option>
                   </template>
-                </optgroup>
-              </select>
-              <select x-model="data.prompter.notInPlay[1]">
-                <option value="">Not in play...</option>
-                <optgroup label="Townsfolk">
-                  <template x-for="role in townsfolkNotInPlay">
-                    <option :value="role" :selected="data.prompter.notInPlay[1] === role" x-text="role"></option>
-                  </template>
-                </optgroup>
-              </select>
-              <select class="mb-0" x-model="data.prompter.notInPlay[2]">
-                <option value="">Not in play...</option>
-                <optgroup label="Townsfolk">
-                  <template x-for="role in townsfolkNotInPlay">
-                    <option :value="role" :selected="data.prompter.notInPlay[2] === role" x-text="role"></option>
-                  </template>
-                </optgroup>
-              </select>
+                </select>
+              </template>
             </article>
           </div>
         </div>
-        <div class="grid">
+        <div class="grid mb-1">
           <div>
-            <article>
+            <article class="mb-0">
               <section>
                 <button ton class="w-full" @click="promptRole()">Role info</button>
               </section>
@@ -167,10 +152,12 @@
               </select>
             </article>
           </div>
-          <div><article><button class="w-full" @click="promptCustom()">Custom</button></article></div>
+          <div>
+            <article class="mb-0"><button class="w-full" @click="promptCustom()">Custom</button></article>
+          </div>
         </div>
         <div class="text-center"><a @click="togglePrompter()">Go back</a></div>
-      </main>
+      </div>
     </div>
     <div
       class="prompter prompter-message"
