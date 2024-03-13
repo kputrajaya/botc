@@ -44,8 +44,8 @@
         Butler: ['Master'],
         Poisoner: ['Poisoned'],
         'Scarlet Woman': ['Demon'],
-        Imp: ['Imp 2', 'Imp 3', 'Imp 4'],
-        '': ['Drunk', 'Die', '+'],
+        Imp: ['Die', '2nd', '3rd', '4th'],
+        '': ['Drunk', '+'],
       },
       firstNight: [
         '(Minion info)',
@@ -116,7 +116,7 @@
         Pukka: ['Poisoned', 'Die'],
         Shabaloth: ['Die 1', 'Die 2', 'Alive'],
         Po: ['Die 1', 'Die 2', 'Die 3', 'Attack 3'],
-        '': ['Die', 'Lunatic', 'Demon', '+'],
+        '': ['Lunatic', '+'],
       },
       firstNight: [
         '(Minion info)',
@@ -188,11 +188,11 @@
         get roleCounts() {
           return ROLE_COUNTS[this.data.players.length].join('-');
         },
-        get alivePlayers() {
+        get alivePlayerCount() {
           return this.data.players.filter((p) => p.status === 'alive').length;
         },
-        get requiredVotes() {
-          return Math.ceil(this.alivePlayers / 2);
+        get requiredVoteCount() {
+          return Math.ceil(this.alivePlayerCount / 2);
         },
         get chosenRoles() {
           return new Set(this.data.players.map((p) => p.role));
@@ -206,10 +206,14 @@
           return this.set.otherNights.filter((r) => chosenRoles.has(r));
         },
         get availableMarkers() {
+          const markers = this.set.markers;
           const chosenRoles = this.chosenRoles;
-          return Object.keys(this.set.markers)
+          return Object.keys(markers)
             .filter((r) => r === '' || chosenRoles.has(r))
-            .flatMap((r) => this.set.markers[r].map((m) => (r ? r.split(' ')[0].substring(0, 5) + ': ' : '') + m));
+            .flatMap((r) => {
+              let shortRole = r.split(' ')[0].substring(0, 5);
+              return markers[r].map((m) => (r ? shortRole + ' - ' : '') + m);
+            });
         },
         get townsfolkNotInPlay() {
           const chosenRoles = this.chosenRoles;
@@ -241,9 +245,10 @@
         },
         changeRole(player) {
           // Record group
+          const roles = this.set.roles;
           player.group = null;
-          for (let group in this.set.roles) {
-            if (this.set.roles[group].indexOf(player.role) >= 0) {
+          for (let group in roles) {
+            if (roles[group].indexOf(player.role) >= 0) {
               player.group = group;
               break;
             }
@@ -256,7 +261,8 @@
           });
 
           // Clean up invalid not-in-play prompt
-          this.data.prompter.notInPlay = this.data.prompter.notInPlay.map((r) => (this.chosenRoles.has(r) ? null : r));
+          const chosenRoles = this.chosenRoles;
+          this.data.prompter.notInPlay = this.data.prompter.notInPlay.map((r) => (chosenRoles.has(r) ? null : r));
         },
         reset() {
           if (!confirm('End game and reset all data?')) return;
