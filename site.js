@@ -39,7 +39,7 @@
         'Fortune Teller': ['Decoy'],
         Undertaker: ['Executed'],
         Monk: ['Protected'],
-        Virgin: ['Used', 'Die'],
+        Virgin: ['Used'],
         Slayer: ['Used'],
         Butler: ['Master'],
         Poisoner: ['Poisoned'],
