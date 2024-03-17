@@ -282,7 +282,7 @@
           if (this.data.sharer.index === null) {
             // Validate and prompt action
             if (this.chosenRoles.size !== this.data.players.length) {
-              alert('Roles are not set!');
+              alert('Fill all roles first!');
               return;
             }
             if (!confirm('Begin sharing sequence?')) return;
@@ -308,7 +308,7 @@
         promptRoles() {
           const roles = this.data.prompter.roles.filter(Boolean).join('\n');
           if (!roles) {
-            alert('Roles are not set!');
+            alert('Choose at least 1 role!');
             return;
           }
           this.data.prompter.message = roles;
