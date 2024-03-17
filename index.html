@@ -96,36 +96,36 @@
         </template>
       </div>
       <div class="text-center">
-        <a @click="toggleStarter()">Starter</a>
-        &bull;
-        <a @click="togglePrompter()">Prompter</a>
+        <a @click="shufflePlayers()">Shuffle</a>
+        &nbsp;&bull;&nbsp;
+        <a @click="toggleSharer()">Share</a>
+        &nbsp;&bull;&nbsp;
+        <a @click="togglePrompter()">Prompt</a>
       </div>
     </main>
 
-    <div class="starter" x-show="data.starter.active">
+    <div class="sharer" x-show="data.sharer.active">
       <div class="container pt-1">
-        <h5>Starter</h5>
+        <h5>Sharer</h5>
         <article>
-          <div x-show="data.starter.index === null">
-            This feature will help you shuffle and distribute the roles to the players.
-          </div>
-          <div x-show="data.starter.index !== null && data.starter.index < data.players.length">
-            <div x-show="!data.starter.show">
-              Pass this device to <strong>P<span x-text="data.starter.index + 1"></span></strong>, before pressing Next
+          <div x-show="data.sharer.index === null">This feature will help you share the roles to the players.</div>
+          <div x-show="data.sharer.index !== null && data.sharer.index &lt; data.players.length">
+            <div x-show="!data.sharer.show">
+              Pass this device to <strong>P<span x-text="data.sharer.index + 1"></span></strong>, before pressing Next
               to reveal the role.
             </div>
-            <div x-show="data.starter.show">
-              Hello <strong>P<span x-text="data.starter.index + 1"></span></strong>, you are the
-              <strong x-text="data.players[data.starter.index]?.role"></strong>. Press Next to conceal your role.
+            <div x-show="data.sharer.show">
+              Hello <strong>P<span x-text="data.sharer.index + 1"></span></strong>, you are the
+              <strong x-text="data.players[data.sharer.index]?.role"></strong>. Press Next to conceal your role.
             </div>
           </div>
-          <div x-show="data.starter.index !== null && data.starter.index >= data.players.length">
-            All done. Return this device to the Storyteller.
+          <div x-show="data.sharer.index !== null && data.sharer.index &gt;= data.players.length">
+            All done! Return this device to the Storyteller.
           </div>
-          <button class="w-full mt-1" @click="starterNext()">Next</button>
+          <button class="w-full mt-1" @click="sharerNext()">Next</button>
         </article>
-        <div x-show="data.starter.index === null" class="mb-1 text-center">
-          <a @click="toggleStarter()">Go back</a>
+        <div x-show="data.sharer.index === null" class="mb-1 text-center">
+          <a @click="toggleSharer()">Go back</a>
         </div>
       </div>
     </div>

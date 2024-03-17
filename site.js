@@ -157,7 +157,7 @@
   const DATA_MODEL = {
     set: 'tb',
     players: [],
-    starter: {
+    sharer: {
       active: false,
       show: false,
       index: null,
@@ -180,11 +180,9 @@
     let currentIndex = array.length;
     let randomIndex;
     while (currentIndex > 0) {
-      // Pick a remaining element.
+      // Pick a random index and swap it with the current one
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex--;
-
-      // Swap it with the current element.
       [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
     }
     return array;
@@ -273,35 +271,32 @@
           this.data = JSON.parse(JSON.stringify(DATA_MODEL));
           window.location.reload();
         },
-        toggleStarter() {
-          this.data.starter.active = !this.data.starter.active;
+        shufflePlayers() {
+          if (!confirm('Shuffle player positions?')) return;
+          shuffle(this.data.players);
         },
-        starterNext() {
-          if (this.data.starter.index === null) {
+        toggleSharer() {
+          this.data.sharer.active = !this.data.sharer.active;
+        },
+        sharerNext() {
+          if (this.data.sharer.index === null) {
             // Validate and prompt action
             if (this.chosenRoles.size !== this.data.players.length) {
-              alert('Roles are not set properly!');
+              alert('Roles are not set!');
               return;
             }
-            const response = (
-              prompt('Choose (1-2):\n1. Shuffle and distribute roles\n2. Distribute roles only') || ''
-            ).trim();
-            if (response === '1') {
-              shuffle(this.data.players);
-              this.data.starter.index = 0;
-            } else if (response === '2') {
-              this.data.starter.index = 0;
-            }
+            if (!confirm('Begin sharing sequence?')) return;
+            this.data.sharer.index = 0;
             return;
           }
 
-          if (this.data.starter.show) {
-            this.data.starter.index++;
-            this.data.starter.show = false;
-          } else if (this.data.starter.index >= this.data.players.length) {
-            this.data.starter.index = null;
+          if (this.data.sharer.show) {
+            this.data.sharer.index++;
+            this.data.sharer.show = false;
+          } else if (this.data.sharer.index >= this.data.players.length) {
+            this.data.sharer.index = null;
           } else {
-            this.data.starter.show = true;
+            this.data.sharer.show = true;
           }
         },
         togglePrompter() {

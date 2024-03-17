@@ -75,7 +75,7 @@ a {
   cursor: pointer;
 }
 
-.starter,
+.sharer,
 .prompter {
   overflow: auto;
   background: var(--pico-background-color);
