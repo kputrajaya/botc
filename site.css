@@ -13,6 +13,9 @@ a {
 .w-full {
   width: 100%;
 }
+.mt-1 {
+  margin-top: var(--pico-block-spacing-vertical);
+}
 .mb-0 {
   margin-bottom: 0;
 }
@@ -72,6 +75,7 @@ a {
   cursor: pointer;
 }
 
+.starter,
 .prompter {
   overflow: auto;
   background: var(--pico-background-color);

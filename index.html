@@ -95,8 +95,39 @@
           </section>
         </template>
       </div>
-      <div class="text-center"><a @click="togglePrompter()">Go to prompter</a></div>
+      <div class="text-center">
+        <a @click="toggleStarter()">Starter</a>,
+        <a @click="togglePrompter()">Prompter</a>
+      </div>
     </main>
+
+    <div class="starter" x-show="data.starter.active">
+      <div class="container pt-1">
+        <h5>Starter</h5>
+        <article>
+          <div x-show="data.starter.index === null">
+            This feature will help you shuffle and distribute the roles to the players.
+          </div>
+          <div x-show="data.starter.index !== null && data.starter.index < data.players.length">
+            <div x-show="!data.starter.show">
+              Pass this device to <strong>P<span x-text="data.starter.index + 1"></span></strong>, before pressing Next
+              to reveal the role.
+            </div>
+            <div x-show="data.starter.show">
+              Hello <strong>P<span x-text="data.starter.index + 1"></span></strong>, you are the
+              <strong x-text="data.players[data.starter.index]?.role"></strong>. Press Next to conceal your role.
+            </div>
+          </div>
+          <div x-show="data.starter.index !== null && data.starter.index >= data.players.length">
+            All done. Return this device to the Storyteller.
+          </div>
+          <button class="w-full mt-1" @click="starterNext()">Next</button>
+        </article>
+        <div x-show="data.starter.index === null" class="mb-1 text-center">
+          <a @click="toggleStarter()">Go back</a>
+        </div>
+      </div>
+    </div>
 
     <div class="prompter" x-show="data.prompter.active">
       <div class="container pt-1">
@@ -171,7 +202,7 @@
       class="prompter prompter-message"
       x-show="data.prompter.message"
       x-text="data.prompter.message"
-      @click="clearPrompt()"
+      @click="promptClear()"
     ></div>
   </body>
 </html>

@@ -157,6 +157,11 @@
   const DATA_MODEL = {
     set: 'tb',
     players: [],
+    starter: {
+      active: false,
+      show: false,
+      index: null,
+    },
     prompter: {
       active: false,
       roles: [null, null, null],
@@ -169,6 +174,20 @@
     group: null,
     markers: [],
     addedMarker: null, // Temporary, reset every time
+  };
+
+  const shuffle = (array) => {
+    let currentIndex = array.length;
+    let randomIndex;
+    while (currentIndex > 0) {
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      // Swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+    return array;
   };
 
   document.addEventListener('alpine:init', () => {
@@ -254,6 +273,37 @@
           this.data = JSON.parse(JSON.stringify(DATA_MODEL));
           window.location.reload();
         },
+        toggleStarter() {
+          this.data.starter.active = !this.data.starter.active;
+        },
+        starterNext() {
+          if (this.data.starter.index === null) {
+            // Validate and prompt action
+            if (this.chosenRoles.size !== this.data.players.length) {
+              alert('Roles are not set properly!');
+              return;
+            }
+            const response = (
+              prompt('Choose (1-2):\n1. Shuffle and distribute roles\n2. Distribute roles only') || ''
+            ).trim();
+            if (response === '1') {
+              shuffle(this.data.players);
+              this.data.starter.index = 0;
+            } else if (response === '2') {
+              this.data.starter.index = 0;
+            }
+            return;
+          }
+
+          if (this.data.starter.show) {
+            this.data.starter.index++;
+            this.data.starter.show = false;
+          } else if (this.data.starter.index >= this.data.players.length) {
+            this.data.starter.index = null;
+          } else {
+            this.data.starter.show = true;
+          }
+        },
         togglePrompter() {
           this.data.prompter.active = !this.data.prompter.active;
         },
@@ -273,7 +323,7 @@
           if (!message) return;
           this.data.prompter.message = message;
         },
-        clearPrompt() {
+        promptClear() {
           this.data.prompter.message = null;
         },
 
