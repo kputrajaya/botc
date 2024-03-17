@@ -33,9 +33,9 @@
         demon: ['Imp'],
       },
       markers: {
-        Washerwoman: ['Townsfolk', 'Decoy'],
-        Librarian: ['Outsider', 'Decoy'],
-        Investigator: ['Minion', 'Decoy'],
+        Washerwoman: ['Townsfolk', 'Wrong'],
+        Librarian: ['Outsider', 'Wrong'],
+        Investigator: ['Minion', 'Wrong'],
         'Fortune Teller': ['Decoy'],
         Undertaker: ['Executed'],
         Monk: ['Protected'],
@@ -44,8 +44,8 @@
         Butler: ['Master'],
         Poisoner: ['Poisoned'],
         'Scarlet Woman': ['Demon'],
-        Imp: ['Die', '2nd', '3rd', '4th'],
-        '': ['Drunk', '+'],
+        Imp: ['Kill', '2nd', '3rd', '4th'],
+        '': ['Drunk'],
       },
       firstNight: [
         '(Minion info)',
@@ -95,28 +95,27 @@
         demon: ['Zombuul', 'Pukka', 'Shabaloth', 'Po'],
       },
       markers: {
-        Grandmother: ['Grandchild', 'Die'],
+        Grandmother: ['Grandchild', 'Dead'],
         Sailor: ['Drunk'],
         Exorcist: ['Chosen'],
         Innkeeper: ['Protected 1', 'Protected 2', 'Drunk'],
-        Gambler: ['Die'],
-        Gossip: ['Die'],
+        Gambler: ['Dead'],
+        Gossip: ['Dead'],
         Courtier: ['Used', 'Drunk 1', 'Drunk 2', 'Drunk 3'],
         Professor: ['Used', 'Alive'],
-        Minstrel: ['Everyone Drunk'],
+        Minstrel: ['All Drunk'],
         'Tea Lady': ['Protected 1', 'Protected 2'],
         Fool: ['Used'],
-        Tinker: ['Die'],
-        Moonchild: ['Die'],
+        Tinker: ['Dead'],
+        Moonchild: ['Dead'],
         Goon: ['Drunk'],
-        Godfather: ['Died Today', 'Die'],
-        "Devil's Advocate": ['Chosen'],
-        Assassin: ['Used', 'Die'],
+        Godfather: ['Died Today', 'Dead'],
+        "Devil's Advocate": ['Protected'],
+        Assassin: ['Used', 'Dead'],
         Zombuul: ['No Death Today', 'Die'],
         Pukka: ['Poisoned', 'Die'],
         Shabaloth: ['Die 1', 'Die 2', 'Alive'],
         Po: ['Die 1', 'Die 2', 'Die 3', 'Attack 3'],
-        '': ['Lunatic', '+'],
       },
       firstNight: [
         '(Minion info)',
@@ -233,11 +232,9 @@
           }
 
           // Add marker
-          if (marker !== '+') {
-            this.data.players.forEach((p) => {
-              p.markers = p.markers.filter((m) => m !== marker);
-            });
-          }
+          this.data.players.forEach((p) => {
+            p.markers = p.markers.filter((m) => m !== marker);
+          });
           player.markers.push(marker);
         },
         removeMarker(player, marker) {
