@@ -101,62 +101,70 @@
     <div class="prompter" x-show="data.prompter.active">
       <div class="container pt-1">
         <h5>Prompter</h5>
-        <div class="grid mb-1">
-          <div>
-            <article class="mb-0"><button class="w-full" @click="promptMinion()">Minion info</button></article>
+        <article>
+          <div class="grid">
+            <div class="mb-1">
+              <button class="w-full" @click="promptText('This is\nthe Demon')">The Demon</button>
+            </div>
+            <div class="mb-1">
+              <button class="w-full" @click="promptText('These are\nyour minions')">Your minions</button>
+            </div>
+            <div class="mb-1">
+              <button class="w-full" @click="promptText('These characters are\nnot in play')">Not in play</button>
+            </div>
           </div>
-          <div>
-            <article class="mb-0">
-              <section>
-                <button class="w-full" @click="promptDemon()">Demon info</button>
-              </section>
-              <template x-for="index in [0, 1, 2]">
-                <select x-model="data.prompter.notInPlay[index]">
-                  <option value="">Not in play...</option>
-                  <template x-for="role in townsfolkNotInPlay">
-                    <option :value="role" :selected="data.prompter.notInPlay[index] === role" x-text="role"></option>
-                  </template>
-                </select>
-              </template>
-            </article>
+          <div class="grid">
+            <div class="mb-1">
+              <button class="w-full" @click="promptText('You are')">You are</button>
+            </div>
+            <div class="mb-1">
+              <button class="w-full" @click="promptText('This player is')">This player is</button>
+            </div>
+            <div class="mb-1">
+              <button class="w-full" @click="promptText('This character\nselected you')">Selected you</button>
+            </div>
           </div>
-        </div>
-        <div class="grid mb-1">
-          <div>
-            <article class="mb-0">
-              <section>
-                <button ton class="w-full" @click="promptRole()">Role info</button>
-              </section>
-              <select class="choose-role mb-0" x-model="data.prompter.roleInfo">
-                <option value="">Role to show...</option>
-                <optgroup label="Townsfolk">
-                  <template x-for="role in set.roles.townsfolk">
-                    <option :value="role" :selected="data.prompter.roleInfo === role" x-text="role"></option>
-                  </template>
-                </optgroup>
-                <optgroup label="Outsider">
-                  <template x-for="role in set.roles.outsider">
-                    <option :value="role" :selected="data.prompter.roleInfo === role" x-text="role"></option>
-                  </template>
-                </optgroup>
-                <optgroup label="Minion">
-                  <template x-for="role in set.roles.minion">
-                    <option :value="role" :selected="data.prompter.roleInfo === role" x-text="role"></option>
-                  </template>
-                </optgroup>
-                <optgroup label="Demon">
-                  <template x-for="role in set.roles.demon">
-                    <option :value="role" :selected="data.prompter.roleInfo === role" x-text="role"></option>
-                  </template>
-                </optgroup>
-              </select>
-            </article>
+          <div class="grid">
+            <div class="mb-1">
+              <button class="w-full" @click="promptText('Did you\nnominate today?')">Nominate today?</button>
+            </div>
+            <div class="mb-1">
+              <button class="w-full" @click="promptText('Did you\nvote today?')">Vote today?</button>
+            </div>
+            <div class="mb-1"><button class="w-full" @click="promptCustom()">Custom</button></div>
           </div>
-          <div>
-            <article class="mb-0"><button class="w-full" @click="promptCustom()">Custom</button></article>
-          </div>
-        </div>
-        <div class="text-center"><a @click="togglePrompter()">Go back</a></div>
+        </article>
+        <article>
+          <section>
+            <button class="w-full" @click="promptRoles()">Role tokens</button>
+          </section>
+          <template x-for="index in [0, 1, 2]">
+            <select class="choose-role" x-model="data.prompter.roles[index]">
+              <option value="">Choose role...</option>
+              <optgroup label="Townsfolk">
+                <template x-for="role in set.roles.townsfolk">
+                  <option :value="role" :selected="data.prompter.roles[index] === role" x-text="role"></option>
+                </template>
+              </optgroup>
+              <optgroup label="Outsider">
+                <template x-for="role in set.roles.outsider">
+                  <option :value="role" :selected="data.prompter.roles[index] === role" x-text="role"></option>
+                </template>
+              </optgroup>
+              <optgroup label="Minion">
+                <template x-for="role in set.roles.minion">
+                  <option :value="role" :selected="data.prompter.roles[index] === role" x-text="role"></option>
+                </template>
+              </optgroup>
+              <optgroup label="Demon">
+                <template x-for="role in set.roles.demon">
+                  <option :value="role" :selected="data.prompter.roles[index] === role" x-text="role"></option>
+                </template>
+              </optgroup>
+            </select>
+          </template>
+        </article>
+        <div class="mb-1 text-center"><a @click="togglePrompter()">Go back</a></div>
       </div>
     </div>
     <div

@@ -73,12 +73,19 @@ a {
 }
 
 .prompter {
+  overflow: auto;
   background: var(--pico-background-color);
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
+}
+.prompter article {
+  padding-bottom: 0;
+}
+.prompter .grid {
+  grid-row-gap: 0;
 }
 .prompter-message {
   font-size: 2.5em;
@@ -87,7 +94,7 @@ a {
   text-transform: uppercase;
   white-space: pre-wrap;
   color: #000;
-  background: #fff;
+  background: #eee;
   display: flex;
   align-items: center;
   justify-content: center;

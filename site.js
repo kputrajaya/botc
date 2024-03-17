@@ -159,8 +159,7 @@
     players: [],
     prompter: {
       active: false,
-      notInPlay: [null, null, null],
-      roleInfo: null,
+      roles: [null, null, null],
       message: null,
     },
   };
@@ -211,10 +210,6 @@
               return markers[r].map((m) => (r ? shortRole + ' - ' : '') + m);
             });
         },
-        get townsfolkNotInPlay() {
-          const chosenRoles = this.chosenRoles;
-          return this.set.roles.townsfolk.filter((r) => !chosenRoles.has(r));
-        },
 
         // Method
         addMarker(player) {
@@ -253,10 +248,6 @@
           this.data.players.forEach((p) => {
             p.markers = p.markers.filter((m) => availableMarkers.has(m));
           });
-
-          // Clean up invalid not-in-play prompt
-          const chosenRoles = this.chosenRoles;
-          this.data.prompter.notInPlay = this.data.prompter.notInPlay.map((r) => (chosenRoles.has(r) ? null : r));
         },
         reset() {
           if (!confirm('End game and reset all data?')) return;
@@ -266,37 +257,16 @@
         togglePrompter() {
           this.data.prompter.active = !this.data.prompter.active;
         },
-        promptMinion() {
-          const demonIndex = this.data.players.findIndex((p) => p.group === 'demon') + 1;
-          if (!demonIndex) {
-            alert('There is no Demon!');
-            return;
-          }
-          this.data.prompter.message = `Demon:\n\n${demonIndex}`;
+        promptText(message) {
+          this.data.prompter.message = message;
         },
-        promptDemon() {
-          const minionIndexes = this.data.players
-            .map((p, i) => (p.group === 'minion' ? i + 1 : null))
-            .filter(Boolean)
-            .join(', ');
-          if (!minionIndexes) {
-            alert('There are no minions!');
+        promptRoles() {
+          const roles = this.data.prompter.roles.filter(Boolean).join('\n');
+          if (!roles) {
+            alert('Roles are not set!');
             return;
           }
-          const notInPlay = this.data.prompter.notInPlay.filter(Boolean).join('\n');
-          if (!notInPlay) {
-            alert('Not in play roles are not set!');
-            return;
-          }
-          this.data.prompter.message = `Minions:\n\n${minionIndexes}\n\nNot in play:\n\n${notInPlay}`;
-        },
-        promptRole() {
-          const role = this.data.prompter.roleInfo;
-          if (!role) {
-            alert('Role is not set!');
-            return;
-          }
-          this.data.prompter.message = `Role:\n\n${role}`;
+          this.data.prompter.message = roles;
         },
         promptCustom() {
           const message = prompt('Write your message:');
