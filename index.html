@@ -51,7 +51,7 @@
         <template x-for="(player, index) in data.players">
           <section>
             <fieldset class="player" role="group">
-              <button :class="player.group" disabled x-text="index + 1"></button>
+              <button class="number" :class="player.group" disabled x-text="index + 1"></button>
               <select x-model="player.status">
                 <option value="alive">&#128516;</option>
                 <option value="dead_vote">&#128128;</option>
@@ -96,9 +96,11 @@
         </template>
       </div>
       <div class="text-center">
+        <a @click="randomizeRoles()">Randomize</a>
+        &nbsp;&bull;&nbsp;
         <a @click="shufflePlayers()">Shuffle</a>
         &nbsp;&bull;&nbsp;
-        <a @click="toggleSharer()">Share</a>
+        <a @click="shareRoles()">Share</a>
         &nbsp;&bull;&nbsp;
         <a @click="togglePrompter()">Prompt</a>
       </div>
@@ -108,8 +110,7 @@
       <div class="container pt-1">
         <h5>Sharer</h5>
         <article>
-          <div x-show="data.sharer.index === null">This feature will help you share the roles to the players.</div>
-          <div x-show="data.sharer.index !== null && data.sharer.index &lt; data.players.length">
+          <div x-show="data.sharer.index &lt; data.players.length">
             <div x-show="!data.sharer.show">
               Pass this device to <strong>P<span x-text="data.sharer.index + 1"></span></strong>, before pressing Next
               to reveal the role.
@@ -119,14 +120,11 @@
               <strong x-text="data.players[data.sharer.index]?.role"></strong>. Press Next to conceal your role.
             </div>
           </div>
-          <div x-show="data.sharer.index !== null && data.sharer.index &gt;= data.players.length">
+          <div x-show="data.sharer.index &gt;= data.players.length">
             All done! Return this device to the Storyteller.
           </div>
           <button class="w-full mt-1" @click="sharerNext()">Next</button>
         </article>
-        <div x-show="data.sharer.index === null" class="mb-1 text-center">
-          <a @click="toggleSharer()">Go back</a>
-        </div>
       </div>
     </div>
 

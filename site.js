@@ -28,7 +28,7 @@
           'Soldier',
           'Mayor',
         ],
-        outsider: ['Butler', 'Drunk', 'Recluse', 'Saint'],
+        outsider: ['Butler', 'Recluse', 'Saint'],
         minion: ['Poisoner', 'Spy', 'Scarlet Woman', 'Baron'],
         demon: ['Imp'],
       },
@@ -160,7 +160,7 @@
     sharer: {
       active: false,
       show: false,
-      index: null,
+      index: 0,
     },
     prompter: {
       active: false,
@@ -207,7 +207,7 @@
           return Math.ceil(this.alivePlayerCount / 2);
         },
         get chosenRoles() {
-          return new Set(this.data.players.map((p) => p.role));
+          return new Set(this.data.players.map((p) => p.role).filter(Boolean));
         },
         get firstNightOrder() {
           const chosenRoles = this.chosenRoles;
@@ -223,8 +223,8 @@
           return Object.keys(markers)
             .filter((r) => r === '' || chosenRoles.has(r))
             .flatMap((r) => {
-              let shortRole = r.split(' ')[0].substring(0, 5);
-              return markers[r].map((m) => (r ? shortRole + ' - ' : '') + m);
+              let shortRole = r.split(' ')[0];
+              return markers[r].map((m) => (r ? shortRole + ' · ' : '') + m);
             });
         },
 
@@ -271,30 +271,53 @@
           this.data = JSON.parse(JSON.stringify(DATA_MODEL));
           window.location.reload();
         },
+        randomizeRoles() {
+          if (!confirm('Randomize player roles?')) return;
+
+          const roleCount = ROLE_COUNTS[this.data.players.length];
+          const roles = this.set.roles;
+          const selectedRoles = Object.fromEntries(
+            Object.keys(roles).map((g, i) => [
+              g,
+              shuffle(Array.from(Array(roles[g].length).keys()))
+                .slice(0, roleCount[i])
+                .sort()
+                .map((i) => roles[g][i]),
+            ])
+          );
+
+          selectedRoles.townsfolk
+            .concat(selectedRoles.outsider)
+            .concat(selectedRoles.minion)
+            .concat(selectedRoles.demon)
+            .forEach((r, i) => {
+              const player = this.data.players[i];
+              player.role = r;
+              this.changeRole(player);
+            });
+        },
         shufflePlayers() {
           if (!confirm('Shuffle player positions?')) return;
           shuffle(this.data.players);
         },
-        toggleSharer() {
-          this.data.sharer.active = !this.data.sharer.active;
-        },
-        sharerNext() {
-          if (this.data.sharer.index === null) {
-            // Validate and prompt action
-            if (this.chosenRoles.size !== this.data.players.length) {
-              alert('Fill all roles first!');
-              return;
-            }
-            if (!confirm('Begin sharing sequence?')) return;
-            this.data.sharer.index = 0;
+        shareRoles() {
+          // Validate and prompt action
+          if (this.chosenRoles.size !== this.data.players.length) {
+            alert('Fill all roles and check for duplicates!');
             return;
           }
-
+          if (!confirm('Begin sharing sequence?')) return;
+          this.data.sharer.active = true;
+        },
+        sharerNext() {
           if (this.data.sharer.show) {
             this.data.sharer.index++;
             this.data.sharer.show = false;
           } else if (this.data.sharer.index >= this.data.players.length) {
-            this.data.sharer.index = null;
+            if (!confirm('Are you really the Storyteller?')) return;
+            this.data.sharer.active = false;
+            this.data.sharer.show = false;
+            this.data.sharer.index = 0;
           } else {
             this.data.sharer.show = true;
           }
@@ -308,7 +331,7 @@
         promptRoles() {
           const roles = this.data.prompter.roles.filter(Boolean).join('\n');
           if (!roles) {
-            alert('Choose at least 1 role!');
+            alert('Choose at least 1 role to be shared!');
             return;
           }
           this.data.prompter.message = roles;
