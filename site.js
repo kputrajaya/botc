@@ -267,7 +267,7 @@
           });
         },
         randomizeRoles() {
-          if (!confirm('Randomize roles based on default count?')) return;
+          if (!confirm('Pick random roles based on the default count?')) return;
 
           // Determine selected roles per group
           const roleCount = ROLE_COUNTS[this.data.players.length];
@@ -294,7 +294,7 @@
             });
         },
         shufflePlayers() {
-          if (!confirm('Shuffle players around?')) return;
+          if (!confirm('Shuffle all players around?')) return;
           shuffle(this.data.players);
         },
         shareRoles() {
@@ -303,7 +303,7 @@
             alert('Fill all roles and check for duplicates!');
             return;
           }
-          if (!confirm('Begin role sharing sequence?')) return;
+          if (!confirm('Share the roles to the players?')) return;
           this.data.sharer.active = true;
         },
         sharerNext() {
