@@ -23,12 +23,8 @@
           </summary>
           <article>
             <section><strong>Role counts</strong>: <span x-text="roleCounts"></span></section>
-            <section>
-              <strong>Required votes</strong>: <span x-text="requiredVoteCount"></span> /
-              <span x-text="alivePlayerCount"></span>
-            </section>
             <section x-show="firstNightOrder.length > 0">
-              <div><strong>First night order</strong>:</div>
+              <div><strong>First night</strong>:</div>
               <ul>
                 <template x-for="role in firstNightOrder">
                   <li x-text="role"></li>
@@ -36,14 +32,17 @@
               </ul>
             </section>
             <section x-show="otherNightsOrder.length > 0">
-              <div><strong>Other nights order</strong>:</div>
+              <div><strong>Other nights</strong>:</div>
               <ul>
                 <template x-for="role in otherNightsOrder">
                   <li x-text="role"></li>
                 </template>
               </ul>
             </section>
-            <div><a @click="reset()">End game</a></div>
+            <section class="mb-0">
+              <strong>Required votes</strong>: <span x-text="requiredVoteCount"></span> /
+              <span x-text="alivePlayerCount"></span>
+            </section>
           </article>
         </details>
       </section>
@@ -103,6 +102,8 @@
         <a @click="shareRoles()">Share</a>
         &nbsp;&bull;&nbsp;
         <a @click="togglePrompter()">Prompt</a>
+        &nbsp;&bull;&nbsp;
+        <a @click="reset()">Reset</a>
       </div>
     </main>
 

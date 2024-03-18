@@ -155,7 +155,7 @@
   };
 
   const DATA_MODEL = {
-    set: 'tb',
+    set: null,
     players: [],
     sharer: {
       active: false,
@@ -266,14 +266,10 @@
             p.markers = p.markers.filter((m) => availableMarkers.has(m));
           });
         },
-        reset() {
-          if (!confirm('End game and reset all data?')) return;
-          this.data = JSON.parse(JSON.stringify(DATA_MODEL));
-          window.location.reload();
-        },
         randomizeRoles() {
-          if (!confirm('Randomize player roles?')) return;
+          if (!confirm('Randomize roles based on default count?')) return;
 
+          // Determine selected roles per group
           const roleCount = ROLE_COUNTS[this.data.players.length];
           const roles = this.set.roles;
           const selectedRoles = Object.fromEntries(
@@ -286,6 +282,7 @@
             ])
           );
 
+          // Update player roles
           selectedRoles.townsfolk
             .concat(selectedRoles.outsider)
             .concat(selectedRoles.minion)
@@ -297,7 +294,7 @@
             });
         },
         shufflePlayers() {
-          if (!confirm('Shuffle player positions?')) return;
+          if (!confirm('Shuffle players around?')) return;
           shuffle(this.data.players);
         },
         shareRoles() {
@@ -306,7 +303,7 @@
             alert('Fill all roles and check for duplicates!');
             return;
           }
-          if (!confirm('Begin sharing sequence?')) return;
+          if (!confirm('Begin role sharing sequence?')) return;
           this.data.sharer.active = true;
         },
         sharerNext() {
@@ -344,9 +341,21 @@
         promptClear() {
           this.data.prompter.message = null;
         },
+        reset() {
+          if (!confirm('End game and reset all data?')) return;
+          this.data = JSON.parse(JSON.stringify(DATA_MODEL));
+          window.location.reload();
+        },
 
         // Initialization
         init() {
+          if (!this.set) {
+            let edition;
+            while (!(edition >= 1 && edition <= 2)) {
+              edition = Math.floor(prompt('Which edition? (1-2)\n1. Trouble Brewing\n2. Bad Moon Rising'));
+            }
+            this.data.set = ['tb', 'bmr'][edition - 1];
+          }
           if (this.data.players.length === 0) {
             let playerCount;
             while (!(playerCount >= 7 && playerCount <= 15)) {
