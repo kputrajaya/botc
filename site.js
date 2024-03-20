@@ -267,7 +267,7 @@
           });
         },
         randomizeRoles() {
-          if (!confirm('Pick random roles based on the default count?')) return;
+          if (!confirm('Pick random roles and replace current choices?')) return;
 
           // Determine selected roles per group
           const roleCount = ROLE_COUNTS[this.data.players.length];
@@ -294,7 +294,7 @@
             });
         },
         shufflePlayers() {
-          if (!confirm('Shuffle all players around?')) return;
+          if (!confirm('Shuffle player positions?')) return;
           shuffle(this.data.players);
         },
         shareRoles() {
@@ -303,7 +303,7 @@
             alert('Fill all roles and check for duplicates!');
             return;
           }
-          if (!confirm('Share the roles to the players?')) return;
+          if (!confirm('Let the players see their roles in sequence?')) return;
           this.data.sharer.active = true;
         },
         sharerNext() {
@@ -342,7 +342,7 @@
           this.data.prompter.message = null;
         },
         reset() {
-          if (!confirm('End game and reset all data?')) return;
+          if (!confirm('End the game and reset all data?')) return;
           this.data = JSON.parse(JSON.stringify(DATA_MODEL));
           window.location.reload();
         },
