@@ -303,7 +303,7 @@
             alert('Fill all roles and check for duplicates!');
             return;
           }
-          if (!confirm('Let the players see their roles in sequence?')) return;
+          if (!confirm('Let the players view their roles in sequence?')) return;
           this.data.sharer.active = true;
         },
         sharerNext() {
