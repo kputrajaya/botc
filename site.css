@@ -6,9 +6,11 @@ a {
   cursor: pointer;
 }
 
+
 [x-cloak] {
   display: none;
 }
+
 
 .w-full {
   width: 100%;
@@ -28,6 +30,7 @@ a {
 .text-center {
   text-align: center;
 }
+
 
 .title h1 {
   margin: 0;
@@ -62,7 +65,7 @@ a {
   flex-grow: 1 !important;
 }
 .player > .add-marker {
-  width: 7em;
+  width: 6em;
 }
 
 .markers {

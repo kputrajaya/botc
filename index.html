@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
-    <title>Grimini</title>
+    <title>BOTC</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css" />
     <link rel="stylesheet" href="site.css" />
@@ -19,7 +19,7 @@
       <section>
         <details>
           <summary class="title">
-            <h1>Grimini</h1>
+            <h1>BOTC</h1>
           </summary>
           <article>
             <section><strong>Role counts</strong>: <span x-text="roleCounts"></span></section>
@@ -80,7 +80,7 @@
                 </optgroup>
               </select>
               <select class="add-marker" x-model="player.addedMarker" @change="addMarker(player)">
-                <option value="">Mark...</option>
+                <option value="">Tag...</option>
                 <template x-for="marker in availableMarkers">
                   <option :value="marker" x-text="marker"></option>
                 </template>

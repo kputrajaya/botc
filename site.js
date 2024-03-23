@@ -267,7 +267,7 @@
           });
         },
         randomizeRoles() {
-          if (!confirm('Pick random roles and replace current choices?')) return;
+          if (!confirm('Pick random roles and replace current set?')) return;
 
           // Determine selected roles per group
           const roleCount = ROLE_COUNTS[this.data.players.length];
