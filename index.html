@@ -50,7 +50,12 @@
         <template x-for="(player, index) in data.players">
           <section>
             <fieldset class="player" role="group">
-              <button class="number" :class="player.group" disabled x-text="index + 1"></button>
+              <button
+                class="number"
+                :class="player.group"
+                x-text="player.initial + (index + 1)"
+                @click="setInitial(player)"
+              ></button>
               <select x-model="player.status">
                 <option value="alive">&#128516;</option>
                 <option value="dead_vote">&#128128;</option>

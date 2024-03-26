@@ -46,9 +46,8 @@ a {
   flex: initial !important;
 }
 .player > .number {
-  width: 2.5em;
+  width: 2.75em;
   padding: 0;
-  font-weight: 700;
   background: #646B79;
   border: 0;
   opacity: 1;
@@ -65,7 +64,7 @@ a {
   flex-grow: 1 !important;
 }
 .player > .add-marker {
-  width: 6em;
+  width: 5.75em;
 }
 
 .markers {

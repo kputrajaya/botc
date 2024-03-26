@@ -169,6 +169,7 @@
     },
   };
   const PLAYER_MODEL = {
+    initial: '',
     status: 'alive', // alive, dead_vote, dead_no_vote
     role: null,
     group: null,
@@ -229,6 +230,32 @@
         },
 
         // Method
+        setInitial(player) {
+          let initial = prompt('Set initial for easier operation [A-Z]?');
+          if (initial === null) return;
+
+          initial = initial.trim().toUpperCase();
+          if (!initial || /^[A-Z]$/.test(initial)) {
+            player.initial = initial;
+          }
+        },
+        changeRole(player) {
+          // Record group
+          const roles = this.set.roles;
+          player.group = null;
+          for (let group in roles) {
+            if (roles[group].indexOf(player.role) >= 0) {
+              player.group = group;
+              break;
+            }
+          }
+
+          // Clean up invalid markers
+          const availableMarkers = new Set(this.availableMarkers);
+          this.data.players.forEach((p) => {
+            p.markers = p.markers.filter((m) => availableMarkers.has(m));
+          });
+        },
         addMarker(player) {
           const marker = player.addedMarker;
           player.addedMarker = null;
@@ -248,23 +275,6 @@
         },
         removeMarker(player, marker) {
           player.markers = player.markers.filter((m) => m !== marker);
-        },
-        changeRole(player) {
-          // Record group
-          const roles = this.set.roles;
-          player.group = null;
-          for (let group in roles) {
-            if (roles[group].indexOf(player.role) >= 0) {
-              player.group = group;
-              break;
-            }
-          }
-
-          // Clean up invalid markers
-          const availableMarkers = new Set(this.availableMarkers);
-          this.data.players.forEach((p) => {
-            p.markers = p.markers.filter((m) => availableMarkers.has(m));
-          });
         },
         randomizeRoles() {
           if (!confirm('Pick random roles and replace current set?')) return;
@@ -334,7 +344,7 @@
           this.data.prompter.message = roles;
         },
         promptCustom() {
-          const message = prompt('Write your message:');
+          const message = prompt('What is your message?');
           if (!message) return;
           this.data.prompter.message = message;
         },
