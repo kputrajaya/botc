@@ -63,7 +63,7 @@ a {
 }
 .player > .status,
 .player > .add-marker {
-  width: 5em;
+  width: 4.8em;
 }
 .player > .choose-role {
   flex-grow: 1 !important;
