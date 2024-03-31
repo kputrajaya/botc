@@ -60,11 +60,12 @@ a {
 .player > .number.demon {
   background: #C72259;
 }
+.player > .status,
+.player > .add-marker {
+  width: 5em;
+}
 .player > .choose-role {
   flex-grow: 1 !important;
-}
-.player > .add-marker {
-  width: 5.75em;
 }
 
 .markers {

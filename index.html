@@ -56,10 +56,16 @@
                 x-text="player.initial + (index + 1)"
                 @click="setInitial(player)"
               ></button>
-              <select x-model="player.status">
-                <option value="alive">&#128516;</option>
-                <option value="dead_vote">&#128128;</option>
-                <option value="dead_no_vote">&#128683;</option>
+              <select class="status" x-model="player.status">
+                <optgroup label="Alive">
+                  <option value="alive">&#128516;</option>
+                </optgroup>
+                <optgroup label="Dead With Vote">
+                  <option value="dead_vote">&#128128;</option>
+                </optgroup>
+                <optgroup label="Dead No Vote">
+                  <option value="dead_no_vote">&#128683;</option>
+                </optgroup>
               </select>
               <select class="choose-role" x-model="player.role" @change="changeRole(player)">
                 <option value="">Choose role...</option>
@@ -85,7 +91,7 @@
                 </optgroup>
               </select>
               <select class="add-marker" x-model="player.addedMarker" @change="addMarker(player)">
-                <option value="">Tag...</option>
+                <option value="">&#9999;&#65039;</option>
                 <template x-for="marker in availableMarkers">
                   <option :value="marker" x-text="marker"></option>
                 </template>
@@ -100,9 +106,7 @@
         </template>
       </div>
       <div class="text-center">
-        <a @click="randomizeRoles()">Pick</a>
-        ·
-        <a @click="shufflePlayers()">Shuffle</a>
+        <a @click="shuffleRoles()">Shuffle</a>
         ·
         <a @click="shareRoles()">Share</a>
         ·

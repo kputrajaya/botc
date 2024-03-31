@@ -177,18 +177,6 @@
     addedMarker: null, // Temporary, reset every time
   };
 
-  const shuffle = (array) => {
-    let currentIndex = array.length;
-    let randomIndex;
-    while (currentIndex > 0) {
-      // Pick a random index and swap it with the current one
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-    }
-    return array;
-  };
-
   document.addEventListener('alpine:init', () => {
     Alpine.data('botc', function () {
       return {
@@ -276,36 +264,24 @@
         removeMarker(player, marker) {
           player.markers = player.markers.filter((m) => m !== marker);
         },
-        randomizeRoles() {
-          if (!confirm('Pick random roles and replace current set?')) return;
+        shuffleRoles() {
+          if (!confirm('Shuffle player roles?')) return;
 
-          // Determine selected roles per group
-          const roleCount = ROLE_COUNTS[this.data.players.length];
-          const roles = this.set.roles;
-          const selectedRoles = Object.fromEntries(
-            Object.keys(roles).map((g, i) => [
-              g,
-              shuffle(Array.from(Array(roles[g].length).keys()))
-                .slice(0, roleCount[i])
-                .sort()
-                .map((i) => roles[g][i]),
-            ])
-          );
+          const players = this.data.players;
 
-          // Update player roles
-          selectedRoles.townsfolk
-            .concat(selectedRoles.outsider)
-            .concat(selectedRoles.minion)
-            .concat(selectedRoles.demon)
-            .forEach((r, i) => {
-              const player = this.data.players[i];
-              player.role = r;
-              this.changeRole(player);
-            });
-        },
-        shufflePlayers() {
-          if (!confirm('Shuffle player positions?')) return;
-          shuffle(this.data.players);
+          // Pick a random index and swap it with the current one
+          let cur = players.length;
+          let ran;
+          while (cur > 0) {
+            ran = Math.floor(Math.random() * cur);
+            cur--;
+            [players[cur].role, players[ran].role] = [players[ran].role, players[cur].role];
+          }
+
+          // Refresh groups and markers
+          players.forEach((p) => {
+            this.changeRole(p);
+          });
         },
         shareRoles() {
           // Validate and prompt action
@@ -313,7 +289,7 @@
             alert('Fill all roles and check for duplicates!');
             return;
           }
-          if (!confirm('Let the players view their roles in sequence?')) return;
+          if (!confirm('Let players view their roles in sequence?')) return;
           this.data.sharer.active = true;
         },
         sharerNext() {
@@ -352,7 +328,7 @@
           this.data.prompter.message = null;
         },
         reset() {
-          if (!confirm('End the game and reset all data?')) return;
+          if (!confirm('End the game and reset data?')) return;
           this.data = JSON.parse(JSON.stringify(DATA_MODEL));
           window.location.reload();
         },
