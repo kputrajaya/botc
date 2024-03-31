@@ -53,7 +53,7 @@
               <button
                 class="number"
                 :class="player.group"
-                x-text="player.initial + (index + 1)"
+                x-text="(player.initial || '') + (index + 1)"
                 @click="setInitial(player)"
               ></button>
               <select class="status" x-model="player.status">
