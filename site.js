@@ -219,7 +219,7 @@
 
         // Method
         setInitial(player) {
-          let initial = prompt('Set initial for easier operation [A-Z]?');
+          let initial = prompt('Set initial for easier operation [A-Z]?', player.initial || '');
           if (initial === null) return;
 
           initial = initial.trim().toUpperCase();
