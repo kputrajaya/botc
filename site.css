@@ -34,7 +34,7 @@ a {
 
 .title h1 {
   margin: 0;
-  font-size: 1.25em;
+  font-size: 1.2rem;
   display: inline-block;
 }
 .title::after {
@@ -43,11 +43,11 @@ a {
 
 .player > * {
   width: auto;
-  padding: 0.5em 0;
+  padding: 0.4em 0;
   flex: initial !important;
 }
 .player > .number {
-  width: 2.75em;
+  width: 2.6em;
   padding: 0;
   background: #646B79;
   border: 0;
@@ -75,9 +75,10 @@ a {
 }
 .markers > kbd {
   margin: calc(var(--pico-spacing) * 0.5) calc(var(--pico-spacing) * 0.5) 0 0;
-  font-size: 0.75rem;
+  font-size: 0.6rem;
   font-weight: 400;
   cursor: pointer;
+  transform: scaleY(1.06);
 }
 
 .sharer,
@@ -97,15 +98,16 @@ a {
   grid-row-gap: 0;
 }
 .prompter-message {
-  font-size: 2.5em;
+  font-size: 2.4rem;
   font-weight: 700;
   text-align: center;
   text-transform: uppercase;
   white-space: pre-wrap;
   color: #000;
-  background: #ddd;
+  background: #ccc;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 3;
+  cursor: pointer;
 }
