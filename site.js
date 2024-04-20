@@ -178,6 +178,11 @@
   };
 
   document.addEventListener('alpine:init', () => {
+    const notyf = new Notyf({
+      ripple: false,
+      position: { x: 'center' },
+    });
+
     Alpine.data('botc', function () {
       return {
         data: this.$persist(JSON.parse(JSON.stringify(DATA_MODEL))),
@@ -225,6 +230,8 @@
           initial = initial.trim().toUpperCase();
           if (!initial || /^[A-Z]$/.test(initial)) {
             player.initial = initial;
+          } else {
+            notyf.error('Invalid initial!');
           }
         },
         changeRole(player) {
@@ -285,11 +292,15 @@
         },
         shareRoles() {
           // Validate and prompt action
-          if (this.chosenRoles.size !== this.data.players.length) {
-            alert('Fill all roles and check for duplicates!');
+          const roles = this.data.players.map((p) => p.role).filter(Boolean);
+          if (roles.length < this.data.players.length) {
+            notyf.error('Fill all roles first!');
             return;
           }
-          if (!confirm('Let players view their roles in sequence?')) return;
+          if (new Set(roles).size < this.data.players.length) {
+            notyf.error('Roles are not unique!');
+            return;
+          }
           this.data.sharer.active = true;
         },
         sharerNext() {
@@ -314,7 +325,7 @@
         promptRoles() {
           const roles = this.data.prompter.roles.filter(Boolean).join('\n');
           if (!roles) {
-            alert('Choose at least 1 role to be shared!');
+            notyf.error('Choose roles first!');
             return;
           }
           this.data.prompter.message = roles;

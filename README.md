@@ -6,4 +6,5 @@ Be a Blood on the Clocktower Storyteller without physical Grimoire.
 
 - [Alpine.js](https://alpinejs.dev/)
 - [Pico](https://picocss.com/)
+- [Notyf](https://carlosroso.com/notyf/)
 - [Vercel](https://vercel.com/)
