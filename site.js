@@ -339,7 +339,9 @@
           this.data.prompter.message = null;
         },
         reset() {
-          if (!confirm('End the game and reset data?')) return;
+          const response = prompt('Reset game? Type "y" to continue.') || '';
+          if (response.trim().toLowerCase() !== 'y') return;
+
           this.data = JSON.parse(JSON.stringify(DATA_MODEL));
           window.location.reload();
         },
