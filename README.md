@@ -1,6 +1,6 @@
 # BOTC
 
-Be a Blood on the Clocktower Storyteller without physical Grimoire.
+Host Blood on the Clocktower without physical Grimoire.
 
 ## Built With
 
