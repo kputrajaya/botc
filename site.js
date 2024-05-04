@@ -217,7 +217,7 @@
           return Object.keys(markers)
             .filter((r) => r === '' || chosenRoles.has(r))
             .flatMap((r) => {
-              let shortRole = r.split(' ')[0];
+              let shortRole = r.split(' ')[0].substring(0, 4).toUpperCase();
               return markers[r].map((m) => (r ? shortRole + ' · ' : '') + m);
             });
         },
