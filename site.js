@@ -1,7 +1,6 @@
 (() => {
-  // Townsfolk, Outsider, Minion, Demon
   const ROLE_COUNTS = {
-    5: [3, 0, 1, 1],
+    5: [3, 0, 1, 1], // Townsfolk, Outsider, Minion, Demon
     6: [3, 1, 1, 1],
     7: [5, 0, 1, 1],
     8: [5, 1, 1, 1],
@@ -218,7 +217,7 @@
           'Soldier',
           'Mayor',
         ],
-        outsider: ['Butler', 'Recluse', 'Saint'],
+        outsider: ['Butler', 'Recluse', 'Saint'], // + Drunk
         minion: ['Poisoner', 'Spy', 'Scarlet Woman', 'Baron'],
         demon: ['Imp'],
       },
@@ -250,7 +249,7 @@
       name: 'No Greater Joy',
       roles: {
         townsfolk: ['Clockmaker', 'Investigator', 'Empath', 'Chambermaid', 'Artist', 'Sage'],
-        outsider: ['Drunk', 'Klutz'],
+        outsider: ['Klutz'], // + Drunk
         minion: ['Scarlet Woman', 'Baron'],
         demon: ['Imp'],
       },
