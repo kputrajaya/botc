@@ -45,9 +45,12 @@
                 </template>
               </ul>
             </section>
-            <section class="mb-0">
+            <section>
               <strong>Required votes</strong>: <span x-text="requiredVoteCount"></span> /
               <span x-text="alivePlayerCount"></span>
+            </section>
+            <section class="mb-0">
+              <strong>Character sheet</strong>: <a :href="data.set + '.pdf'" target="_blank">Link</a>
             </section>
           </article>
         </details>
