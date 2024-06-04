@@ -1,6 +1,8 @@
 (() => {
   // Townsfolk, Outsider, Minion, Demon
   const ROLE_COUNTS = {
+    5: [3, 0, 1, 1],
+    6: [3, 1, 1, 1],
     7: [5, 0, 1, 1],
     8: [5, 1, 1, 1],
     9: [5, 2, 1, 1],
@@ -157,8 +159,49 @@
       'Mathematician',
     ],
   };
+  // From http://bignose.whitetree.org/projects/botc/diy/token/grimoire-tokens.base-editions.pdf
+  const MARKERS = {
+    Artist: ['No Ability'],
+    Assassin: ['Dead', 'No Ability'],
+    Butler: ['Master'],
+    Courtier: ['Drunk 1', 'Drunk 2', 'Drunk 3', 'No Ability'],
+    "Devil's Advocate": ['Survives Execution'],
+    Exorcist: ['Chosen'],
+    Fool: ['No Ability'],
+    'Fortune Teller': ['Red Herring'],
+    Gambler: ['Dead'],
+    Godfather: ['Died Today', 'Dead'],
+    Goon: ['Drunk'],
+    Gossip: ['Dead'],
+    Grandmother: ['Grandchild', 'Dead'],
+    Imp: ['Dead', '2nd Imp', '3rd Imp', '4th Imp'],
+    Innkeeper: ['Safe 1', 'Safe 2', 'Drunk'],
+    Investigator: ['Minion', 'Wrong'],
+    Librarian: ['Outsider', 'Wrong'],
+    Lunatic: ['Chosen 1', 'Chosen 2', 'Chosen 3'],
+    Minstrel: ['Everyone Is Drunk'],
+    Monk: ['Safe'],
+    Moonchild: ['Dead'],
+    Po: ['Dead 1', 'Dead 2', 'Dead 3', '3 Attacks'],
+    Poisoner: ['Poisoned'],
+    Professor: ['Alive', 'No Ability'],
+    Pukka: ['Poisoned 1', 'Poisoned 2', 'Dead'],
+    Sage: ['Demon', 'Wrong'],
+    Sailor: ['Drunk'],
+    'Scarlet Woman': ['Is The Demon'],
+    Shabaloth: ['Dead 1', 'Dead 2', 'Alive'],
+    Slayer: ['No Ability'],
+    'Tea Lady': ['Cannot Die 1', 'Cannot Die 2'],
+    Tinker: ['Dead'],
+    Undertaker: ['Died Today'],
+    Virgin: ['No Ability'],
+    Washerwoman: ['Townsfolk', 'Wrong'],
+    Zombuul: ['Died Today', 'Dead'],
+    '': ['Is The Drunk', '(Good)', '(Evil)'],
+  };
   const SETS = {
     tb: {
+      name: 'Trouble Brewing',
       roles: {
         townsfolk: [
           'Washerwoman',
@@ -179,23 +222,9 @@
         minion: ['Poisoner', 'Spy', 'Scarlet Woman', 'Baron'],
         demon: ['Imp'],
       },
-      markers: {
-        Washerwoman: ['Townsfolk', 'Wrong'],
-        Librarian: ['Outsider', 'Wrong'],
-        Investigator: ['Minion', 'Wrong'],
-        'Fortune Teller': ['Red Herring'],
-        Undertaker: ['Died Today'],
-        Monk: ['Safe'],
-        Virgin: ['No Ability'],
-        Slayer: ['No Ability'],
-        Butler: ['Master'],
-        Poisoner: ['Poisoned'],
-        'Scarlet Woman': ['Is The Demon'],
-        Imp: ['Dead', '2nd Imp', '3rd Imp', '4th Imp'],
-        '': ['Is The Drunk'],
-      },
     },
     bmr: {
+      name: 'Bad Moon Rising',
       roles: {
         townsfolk: [
           'Grandmother',
@@ -216,29 +245,14 @@
         minion: ['Godfather', "Devil's Advocate", 'Assassin', 'Mastermind'],
         demon: ['Zombuul', 'Pukka', 'Shabaloth', 'Po'],
       },
-      markers: {
-        Grandmother: ['Grandchild', 'Dead'],
-        Sailor: ['Drunk'],
-        Exorcist: ['Chosen'],
-        Innkeeper: ['Safe 1', 'Safe 2', 'Drunk'],
-        Gambler: ['Dead'],
-        Gossip: ['Dead'],
-        Courtier: ['Drunk 1', 'Drunk 2', 'Drunk 3', 'No Ability'],
-        Professor: ['Alive', 'No Ability'],
-        Minstrel: ['Everyone Is Drunk'],
-        'Tea Lady': ['Cannot Die 1', 'Cannot Die 2'],
-        Fool: ['No Ability'],
-        Tinker: ['Dead'],
-        Moonchild: ['Dead'],
-        Goon: ['Drunk'],
-        Lunatic: ['Chosen 1', 'Chosen 2', 'Chosen 3'],
-        Godfather: ['Died Today', 'Dead'],
-        "Devil's Advocate": ['Survives Execution'],
-        Assassin: ['Dead', 'No Ability'],
-        Zombuul: ['Died Today', 'Dead'],
-        Pukka: ['Poisoned 1', 'Poisoned 2', 'Dead'],
-        Shabaloth: ['Dead 1', 'Dead 2', 'Alive'],
-        Po: ['Dead 1', 'Dead 2', 'Dead 3', '3 Attacks'],
+    },
+    ngj: {
+      name: 'No Greater Joy',
+      roles: {
+        townsfolk: ['Clockmaker', 'Investigator', 'Empath', 'Chambermaid', 'Artist', 'Sage'],
+        outsider: ['Drunk', 'Klutz'],
+        minion: ['Scarlet Woman', 'Baron'],
+        demon: ['Imp'],
       },
     },
   };
@@ -301,13 +315,12 @@
           return ORDERS.otherNights.filter((r) => chosenRoles.has(r));
         },
         get availableMarkers() {
-          const markers = this.set.markers;
           const chosenRoles = this.chosenRoles;
-          return Object.keys(markers)
+          return Object.keys(MARKERS)
             .filter((r) => r === '' || chosenRoles.has(r))
             .flatMap((r) => {
-              let shortRole = r.split(' ')[0].substring(0, 4).toUpperCase();
-              return markers[r].map((m) => (r ? shortRole + ' · ' : '') + m);
+              let shortRole = r.split(' ')[0].substring(0, 5).toUpperCase();
+              return MARKERS[r].map((m) => (r ? shortRole + ' · ' : '') + m);
             });
         },
 
@@ -352,9 +365,11 @@
           }
 
           // Add marker
-          this.data.players.forEach((p) => {
-            p.markers = p.markers.filter((m) => m !== marker);
-          });
+          if (!marker.startsWith('(')) {
+            this.data.players.forEach((p) => {
+              p.markers = p.markers.filter((m) => m !== marker);
+            });
+          }
           player.markers.push(marker);
         },
         removeMarker(player, marker) {
@@ -437,22 +452,28 @@
 
         // Initialization
         init() {
-          if (!this.set) {
-            let edition;
-            while (!(edition >= 1 && edition <= 2)) {
-              edition = Math.floor(prompt('Which edition? (1-2)\n1. Trouble Brewing\n2. Bad Moon Rising'));
-            }
-            this.data.set = ['tb', 'bmr'][edition - 1];
-          }
           if (this.data.players.length === 0) {
+            const minPlayer = 5;
+            const maxPlayer = 15;
+            const promptText = `How many players? (${minPlayer}-${maxPlayer})`;
             let playerCount;
-            while (!(playerCount >= 7 && playerCount <= 15)) {
-              playerCount = Math.floor(prompt('How many players? (7-15)'));
+            while (!(playerCount >= minPlayer && playerCount <= maxPlayer)) {
+              playerCount = Math.floor(prompt(promptText));
             }
             const playerModelJson = JSON.stringify(PLAYER_MODEL);
             for (let i = 0; i < playerCount; i++) {
               this.data.players.push(JSON.parse(playerModelJson));
             }
+          }
+          if (!this.set) {
+            const keys = Object.keys(SETS);
+            const options = keys.map((key, index) => `${index + 1}. ${SETS[key].name}`);
+            const promptText = `Which edition? (1-${keys.length})\n${options.join('\n')}`;
+            let edition;
+            while (!(edition >= 1 && edition <= keys.length)) {
+              edition = Math.floor(prompt(promptText));
+            }
+            this.data.set = keys[edition - 1];
           }
         },
       };
