@@ -322,17 +322,55 @@
       ripple: false,
       position: { x: 'center' },
     });
+    const getParams = () => {
+      const params = {};
+      const search = window.location.search;
+      if (search) {
+        search
+          .substring(1)
+          .split('&')
+          .forEach((param) => {
+            const [key, value] = param.split('=');
+            params[key] = decodeURIComponent(value).replace(/\+/g, ' ').replace(/\|/g, '\n');
+          });
+      }
+      return params;
+    };
+    const copyText = async (text) => {
+      // Copy using execCommand
+      const el = document.createElement('textarea');
+      el.style.opacity = 0;
+      document.body.appendChild(el);
+      el.value = text;
+      el.focus();
+      el.select();
+      const result = document.execCommand && document.execCommand('copy');
+      el.remove();
+      if (result === true) return true;
+
+      // Copy using navigator.clipboard
+      if (navigator.clipboard) {
+        try {
+          await navigator.clipboard.writeText(text);
+          return true;
+        } catch {}
+      }
+
+      return false;
+    };
 
     Alpine.data('botc', function () {
       return {
         data: this.$persist(JSON.parse(JSON.stringify(DATA_MODEL))),
+        subKey: this.$persist(null),
+        isPub: true,
 
         // Computed
         get set() {
-          return SETS[this.data.set];
+          return SETS[this.data.set || Object.keys(SETS)[0]];
         },
         get roleCounts() {
-          return ROLE_COUNTS[this.data.players.length].join('-');
+          return (ROLE_COUNTS[this.data.players.length] || []).join(' - ');
         },
         get alivePlayerCount() {
           return this.data.players.filter((p) => p.status === 'alive').length;
@@ -442,6 +480,7 @@
             notyf.error('Roles are not unique!');
             return;
           }
+          if (!confirm('Start sharing roles to players?')) return;
           this.data.sharer.active = true;
         },
         sharerNext() {
@@ -479,6 +518,10 @@
         promptClear() {
           this.data.prompter.message = null;
         },
+        displayTownSquare() {
+          copyText(`${window.location.href}?k=${this.subKey}`);
+          notyf.success('Link copied to clipboard!');
+        },
         reset() {
           const response = prompt('Reset game? Type "y" to continue.') || '';
           if (response.trim().toLowerCase() !== 'y') return;
@@ -489,28 +532,75 @@
 
         // Initialization
         init() {
-          if (this.data.players.length === 0) {
-            const minPlayer = 5;
-            const maxPlayer = 15;
-            const promptText = `How many players? (${minPlayer}-${maxPlayer})`;
-            let playerCount;
-            while (!(playerCount >= minPlayer && playerCount <= maxPlayer)) {
-              playerCount = Math.floor(prompt(promptText));
+          const connect = (subKey, isPub) => {
+            const ws = new WebSocket('wss://pubsub.h.kvn.pt/');
+            let interval;
+            if (isPub) {
+              ws.onopen = () => {
+                console.log('Sending data');
+                ws.send(JSON.stringify({ action: 'pub', key: subKey, data: this.data }));
+              };
+              this.$watch('data', (value) => {
+                console.log('Sending data');
+                ws.send(JSON.stringify({ action: 'pub', key: subKey, data: this.data }));
+              });
+              interval = setInterval(() => {
+                console.log('Sending data (interval)');
+                ws.send(JSON.stringify({ action: 'pub', key: subKey, data: this.data }));
+              }, 30000);
+            } else {
+              ws.onopen = () => {
+                console.log('Subscribing to:', subKey);
+                ws.send(JSON.stringify({ action: 'sub', key: subKey }));
+              };
+              ws.onmessage = (event) => {
+                console.log('Received data');
+                this.data = JSON.parse(event.data);
+              };
             }
-            const playerModelJson = JSON.stringify(PLAYER_MODEL);
-            for (let i = 0; i < playerCount; i++) {
-              this.data.players.push(JSON.parse(playerModelJson));
-            }
+            ws.onerror = function (err) {
+              console.error('Socket error:', err.message);
+              ws.close();
+            };
+            ws.onclose = (e) => {
+              console.log('Socket closed:', e.reason);
+              setTimeout(() => connect(subKey, isPub), 1000);
+              clearInterval(interval);
+            };
+          };
+
+          const params = getParams();
+          if (!this.subKey) {
+            this.subKey = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
           }
-          if (!this.set) {
-            const keys = Object.keys(SETS);
-            const options = keys.map((key, index) => `${index + 1}. ${SETS[key].name}`);
-            const promptText = `Which edition? (1-${keys.length})\n${options.join('\n')}`;
-            let edition;
-            while (!(edition >= 1 && edition <= keys.length)) {
-              edition = Math.floor(prompt(promptText));
+          if (params.k) {
+            this.isPub = false;
+            connect('botc:' + params.k, false);
+          } else {
+            if (!this.data.players.length) {
+              const minPlayer = 5;
+              const maxPlayer = 15;
+              const promptText = `How many players? (${minPlayer}-${maxPlayer})`;
+              let playerCount;
+              while (!(playerCount >= minPlayer && playerCount <= maxPlayer)) {
+                playerCount = Math.floor(prompt(promptText));
+              }
+              const playerModelJson = JSON.stringify(PLAYER_MODEL);
+              for (let i = 0; i < playerCount; i++) {
+                this.data.players.push(JSON.parse(playerModelJson));
+              }
             }
-            this.data.set = keys[edition - 1];
+            if (!this.data.set) {
+              const keys = Object.keys(SETS);
+              const options = keys.map((key, index) => `${index + 1}. ${SETS[key].name}`);
+              const promptText = `Which edition? (1-${keys.length})\n${options.join('\n')}`;
+              let edition;
+              while (!(edition >= 1 && edition <= keys.length)) {
+                edition = Math.floor(prompt(promptText));
+              }
+              this.data.set = keys[edition - 1];
+            }
+            connect('botc:' + this.subKey, true);
           }
         },
       };

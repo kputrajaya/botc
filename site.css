@@ -44,7 +44,9 @@ a {
 
 .player > * {
   width: auto;
-  padding: 0.4em 0;
+  height: auto !important;
+  padding-top: 0.4em !important;
+  padding-bottom: 0.4em !important;
   flex: initial !important;
 }
 .player > .number {
@@ -65,6 +67,7 @@ a {
 .player > .status,
 .player > .add-marker {
   width: 4.8em;
+  text-align: center;
 }
 .player > .choose-role {
   flex-grow: 1 !important;
