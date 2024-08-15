@@ -211,7 +211,7 @@
     Vortox: ['Dead'],
     Washerwoman: ['Townsfolk', 'Wrong'],
     Zombuul: ['Died Today', 'Dead'],
-    '': ['Is The Drunk', '(Good)', '(Evil)'],
+    '': ['Is The Drunk', 'Good', 'Evil'],
   };
   const SETS = {
     tb: {
@@ -356,7 +356,7 @@
           return Object.keys(MARKERS)
             .filter((r) => r === '' || chosenRoles.has(r))
             .flatMap((r) => {
-              let shortRole = r.split(' ')[0].substring(0, 5).toUpperCase();
+              let shortRole = r.replace(/\s/g, '').substring(0, 5).toUpperCase();
               return MARKERS[r].map((m) => (r ? shortRole + ' · ' : '') + m);
             });
         },

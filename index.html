@@ -29,7 +29,8 @@
           </summary>
           <article>
             <section>
-              <strong>Character sheet</strong>: <a :href="data.set + '.pdf'" target="_blank" x-text="set.name"></a>
+              <strong>Character sheet</strong>:
+              <a :href="'files/' + data.set + '.pdf'" target="_blank" x-text="set.name"></a>
             </section>
             <section><strong>Role counts</strong>: <span x-text="roleCounts"></span></section>
             <section x-show="firstNightOrder.length > 0">
