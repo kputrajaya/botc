@@ -105,7 +105,6 @@
               </optgroup>
             </select>
             <select class="choose-role" x-model="player.role" @change="changeRole(player)">
-              <option value="">Choose role...</option>
               <optgroup label="Townsfolk">
                 <template x-for="role in set.roles.townsfolk">
                   <option :value="role" :selected="player.role === role" x-text="role"></option>
