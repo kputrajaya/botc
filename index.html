@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <meta name="color-scheme" content="light dark" />
-    <title>Pocket Grimoire</title>
+    <title>Pocket BOTC</title>
 
     <link rel="icon" href="favicon-16.png" sizes="16x16" />
     <link rel="icon" href="favicon-32.png" sizes="32x32" />
@@ -65,17 +65,17 @@
               <span x-text="alivePlayerCount"></span>
             </section>
             <section><strong>Role counts</strong>: <span x-text="roleCounts"></span></section>
-            <section x-show="firstNightOrder.length > 0">
+            <section>
               <div><strong>First night</strong>:</div>
-              <ul>
+              <ul x-show="firstNightOrder.length">
                 <template x-for="role in firstNightOrder">
                   <li x-text="role"></li>
                 </template>
               </ul>
             </section>
-            <section class="mb-0" x-show="otherNightsOrder.length > 0">
+            <section class="mb-0">
               <div><strong>Other nights</strong>:</div>
-              <ul>
+              <ul x-show="otherNightsOrder.length">
                 <template x-for="role in otherNightsOrder">
                   <li x-text="role"></li>
                 </template>
@@ -84,73 +84,71 @@
           </article>
         </details>
       </section>
-      <div class="overflow-auto">
-        <template x-for="(player, index) in data.players">
-          <section>
-            <fieldset class="player" role="group">
-              <button
-                class="number"
-                :class="player.group"
-                x-text="(player.initial || '') + (index + 1)"
-                @click="setInitial(player)"
-              ></button>
-              <select class="status" x-model="player.status">
-                <optgroup label="Alive">
-                  <option value="alive">&#128516;</option>
-                </optgroup>
-                <optgroup label="Dead With Vote">
-                  <option value="dead_vote">&#128128;</option>
-                </optgroup>
-                <optgroup label="Dead With No Vote">
-                  <option value="dead_no_vote">&#128683;</option>
-                </optgroup>
-              </select>
-              <select class="choose-role" x-model="player.role" @change="changeRole(player)">
-                <option value="">Choose role...</option>
-                <optgroup label="Townsfolk">
-                  <template x-for="role in set.roles.townsfolk">
-                    <option :value="role" :selected="player.role === role" x-text="role"></option>
-                  </template>
-                </optgroup>
-                <optgroup label="Outsider">
-                  <template x-for="role in set.roles.outsider">
-                    <option :value="role" :selected="player.role === role" x-text="role"></option>
-                  </template>
-                </optgroup>
-                <optgroup label="Minion">
-                  <template x-for="role in set.roles.minion">
-                    <option :value="role" :selected="player.role === role" x-text="role"></option>
-                  </template>
-                </optgroup>
-                <optgroup label="Demon">
-                  <template x-for="role in set.roles.demon">
-                    <option :value="role" :selected="player.role === role" x-text="role"></option>
-                  </template>
-                </optgroup>
-              </select>
-              <select class="add-marker" x-model="player.addedMarker" @change="addMarker(player)">
-                <option value="">&#9999;&#65039;</option>
-                <template x-for="marker in availableMarkers">
-                  <option :value="marker" x-text="marker"></option>
+      <template x-for="(player, index) in data.players">
+        <section>
+          <fieldset class="player" role="group">
+            <button
+              class="number"
+              :class="player.group"
+              x-text="(player.initial || '') + (index + 1)"
+              @click="setInitial(player)"
+            ></button>
+            <select class="status" x-model="player.status">
+              <optgroup label="Alive">
+                <option value="alive">&#128516;</option>
+              </optgroup>
+              <optgroup label="Dead With Vote">
+                <option value="dead_vote">&#128128;</option>
+              </optgroup>
+              <optgroup label="Dead With No Vote">
+                <option value="dead_no_vote">&#128683;</option>
+              </optgroup>
+            </select>
+            <select class="choose-role" x-model="player.role" @change="changeRole(player)">
+              <option value="">Choose role...</option>
+              <optgroup label="Townsfolk">
+                <template x-for="role in set.roles.townsfolk">
+                  <option :value="role" :selected="player.role === role" x-text="role"></option>
                 </template>
-              </select>
-            </fieldset>
-            <small class="markers">
-              <template x-for="marker in player.markers">
-                <kbd x-text="marker" @click="removeMarker(player, marker)" title="Remove marker"></kbd>
+              </optgroup>
+              <optgroup label="Outsider">
+                <template x-for="role in set.roles.outsider">
+                  <option :value="role" :selected="player.role === role" x-text="role"></option>
+                </template>
+              </optgroup>
+              <optgroup label="Minion">
+                <template x-for="role in set.roles.minion">
+                  <option :value="role" :selected="player.role === role" x-text="role"></option>
+                </template>
+              </optgroup>
+              <optgroup label="Demon">
+                <template x-for="role in set.roles.demon">
+                  <option :value="role" :selected="player.role === role" x-text="role"></option>
+                </template>
+              </optgroup>
+            </select>
+            <select class="add-marker" x-model="player.addedMarker" @change="addMarker(player)">
+              <option value="">&#9999;&#65039;</option>
+              <template x-for="marker in availableMarkers">
+                <option :value="marker" x-text="marker"></option>
               </template>
-            </small>
-          </section>
-        </template>
-      </div>
+            </select>
+          </fieldset>
+          <small class="markers">
+            <template x-for="marker in player.markers">
+              <kbd x-text="marker" @click="removeMarker(player, marker)" title="Remove marker"></kbd>
+            </template>
+          </small>
+        </section>
+      </template>
       <div class="text-center">
         <a @click="shuffleRoles()">Shuffle</a>
         ·
-        <a @click="shareRoles()">Share</a>
+        <a @click="toggleSharer()">Share</a>
         ·
         <a @click="togglePrompter()">Prompt</a>
         ·
-        <a @click="displayTownSquare()">Display</a>
+        <a @click="copyTownLink()">Town</a>
         ·
         <a @click="reset()">Reset</a>
       </div>

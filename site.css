@@ -45,32 +45,41 @@ a {
 .player > * {
   width: auto;
   height: auto !important;
-  padding-top: 0.4em !important;
-  padding-bottom: 0.4em !important;
+  padding: 0.4em 2em 0.4em 0.6em !important;
   flex: initial !important;
 }
 .player > .number {
-  width: 2.6em;
-  padding: 0;
+  width: 2.5em;
+  padding: 0 !important;
   background: #646B79;
   border: 0;
   opacity: 1;
+  white-space: nowrap;
+  overflow: hidden;
 }
-.player > .number.townsfolk,
-.player > .number.outsider {
+.player > .number.townsfolk {
   background: #0172AD;
 }
-.player > .number.minion,
+.player > .number.outsider {
+  background: #655CD6;
+}
+.player > .number.minion {
+  background: #9C5900;
+}
 .player > .number.demon {
-  background: #C72259;
+  background: #BD3C13;
 }
 .player > .status,
 .player > .add-marker {
-  width: 4.8em;
+  width: 4em;
   text-align: center;
 }
 .player > .choose-role {
-  flex-grow: 1 !important;
+  width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1 1 auto !important;
 }
 
 .markers {

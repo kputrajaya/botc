@@ -363,7 +363,7 @@
       return {
         data: this.$persist(JSON.parse(JSON.stringify(DATA_MODEL))),
         subKey: this.$persist(null),
-        isPub: true,
+        isPub: true, // Whether the page is a publisher (Grimoire) or subscriber (Town Square)
 
         // Computed
         get set() {
@@ -469,7 +469,7 @@
             this.changeRole(p);
           });
         },
-        shareRoles() {
+        toggleSharer() {
           // Validate and prompt action
           const roles = this.data.players.map((p) => p.role).filter(Boolean);
           if (roles.length < this.data.players.length) {
@@ -518,9 +518,9 @@
         promptClear() {
           this.data.prompter.message = null;
         },
-        displayTownSquare() {
+        copyTownLink() {
           copyText(`${window.location.href}?k=${this.subKey}`);
-          notyf.success('Link copied to clipboard!');
+          notyf.success('Town square link copied!');
         },
         reset() {
           const response = prompt('Reset game? Type "y" to continue.') || '';
@@ -532,12 +532,12 @@
 
         // Initialization
         init() {
-          const connect = (subKey, isPub) => {
+          const connect = (subKey) => {
             const ws = new WebSocket('wss://pubsub.h.kvn.pt/');
             let interval;
-            if (isPub) {
+            if (this.isPub) {
               ws.onopen = () => {
-                console.log('Sending data');
+                console.log('Sending data (initial)');
                 ws.send(JSON.stringify({ action: 'pub', key: subKey, data: this.data }));
               };
               this.$watch('data', (value) => {
@@ -564,43 +564,59 @@
             };
             ws.onclose = (e) => {
               console.log('Socket closed:', e.reason);
-              setTimeout(() => connect(subKey, isPub), 1000);
+              setTimeout(() => connect(subKey), 1000);
               clearInterval(interval);
             };
           };
 
+          this.subKey = this.subKey || Math.random().toString(36).substring(2);
           const params = getParams();
-          if (!this.subKey) {
-            this.subKey = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-          }
           if (params.k) {
             this.isPub = false;
-            connect('botc:' + params.k, false);
+            connect('botc:' + params.k);
           } else {
-            if (!this.data.players.length) {
+            if (!this.data.players.length || !this.data.set) {
+              // Ask for player count
               const minPlayer = 5;
               const maxPlayer = 15;
-              const promptText = `How many players? (${minPlayer}-${maxPlayer})`;
+              let promptText = `How many players? (${minPlayer}-${maxPlayer})`;
               let playerCount;
               while (!(playerCount >= minPlayer && playerCount <= maxPlayer)) {
                 playerCount = Math.floor(prompt(promptText));
               }
+              this.data.players = [];
               const playerModelJson = JSON.stringify(PLAYER_MODEL);
               for (let i = 0; i < playerCount; i++) {
                 this.data.players.push(JSON.parse(playerModelJson));
               }
-            }
-            if (!this.data.set) {
+
+              // Ask for edition
               const keys = Object.keys(SETS);
               const options = keys.map((key, index) => `${index + 1}. ${SETS[key].name}`);
-              const promptText = `Which edition? (1-${keys.length})\n${options.join('\n')}`;
+              promptText = `Which edition? (1-${keys.length})\n${options.join('\n')}`;
               let edition;
               while (!(edition >= 1 && edition <= keys.length)) {
                 edition = Math.floor(prompt(promptText));
               }
               this.data.set = keys[edition - 1];
+
+              // Randomize roles
+              let lastPlayerIndex = 0;
+              const roleGroups = Object.values(this.set.roles);
+              ROLE_COUNTS[this.data.players.length].forEach((roleCount, i) => {
+                const selectedRoles = roleGroups[i]
+                  .sort(() => Math.random() - 0.5)
+                  .slice(0, roleCount)
+                  .sort();
+                selectedRoles.forEach((role, j) => {
+                  const player = this.data.players[lastPlayerIndex + j];
+                  player.role = role;
+                  this.changeRole(player);
+                });
+                lastPlayerIndex += roleCount;
+              });
             }
-            connect('botc:' + this.subKey, true);
+            connect('botc:' + this.subKey);
           }
         },
       };
