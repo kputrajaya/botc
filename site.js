@@ -601,13 +601,16 @@
               this.data.set = keys[edition - 1];
 
               // Randomize roles
-              let lastPlayerIndex = 0;
               const roleGroups = Object.values(this.set.roles);
-              ROLE_COUNTS[this.data.players.length].forEach((roleCount, i) => {
+              const roleCounts = ROLE_COUNTS[this.data.players.length];
+              let lastPlayerIndex = 0;
+              roleCounts.forEach((roleCount, i) => {
                 const selectedRoles = roleGroups[i]
+                  .map((role, index) => ({ role, index }))
                   .sort(() => Math.random() - 0.5)
                   .slice(0, roleCount)
-                  .sort();
+                  .sort((a, b) => a.index - b.index)
+                  .map((item) => item.role);
                 selectedRoles.forEach((role, j) => {
                   const player = this.data.players[lastPlayerIndex + j];
                   player.role = role;
