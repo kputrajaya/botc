@@ -72,7 +72,6 @@ a {
 .player > .status,
 .player > .add-marker {
   width: 4em;
-  text-align: center;
 }
 .player > .choose-role {
   width: 0;
