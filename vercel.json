@@ -1,6 +1,0 @@
-{
-  "rewrites": [
-    { "source": "/tb", "destination": "/tb.pdf" },
-    { "source": "/bmr", "destination": "/bmr.pdf" }
-  ]
-}
