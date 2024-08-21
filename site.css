@@ -7,14 +7,17 @@ a {
   cursor: pointer;
 }
 
+/* Attributes */
 [x-cloak] {
   display: none;
 }
 
 
+/* Utils */
 .w-full {
   width: 100%;
 }
+
 .mt-2 {
   margin-top: var(--pico-block-spacing-vertical);
 }
@@ -30,19 +33,13 @@ a {
 .pt-2 {
   padding-top: var(--pico-block-spacing-vertical);
 }
+
 .text-center {
   text-align: center;
 }
 
 
-
-.town-hall {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-column-gap: var(--pico-block-spacing-horizontal);
-  grid-row-gap: 0;
-}
-
+/* Components */
 .title h1 {
   margin: 0;
   font-size: 1.2rem;
@@ -132,4 +129,14 @@ a {
   justify-content: center;
   z-index: 3;
   cursor: pointer;
+}
+
+.town-hall {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: var(--pico-block-spacing-horizontal);
+  grid-row-gap: 0;
+}
+.town-hall .player > .number {
+  width: 4em;
 }

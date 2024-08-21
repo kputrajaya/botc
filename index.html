@@ -24,19 +24,38 @@
     <!-- Town Square -->
     <main class="container" x-show="!isPub">
       <div class="town-hall">
-        <template x-for="(player, index) in data.players">
-          <article class="text-center">
-            <h3
-              class="mb-1"
-              x-text="player.status == 'alive' ?
+        <div>
+          <template x-for="(player, index) in data.players.slice(0, midpointIndex)">
+            <fieldset class="player" role="group">
+              <button class="number townsfolk" x-text="(player.initial || '') + (index + 1)"></button>
+              <input
+                :value="
+                player.status == 'alive' ?
                 '&#128516;' :
                 player.status == 'dead_vote' ?
                 '&#128128;' :
                 '&#10060;'"
-            ></h3>
-            <strong x-text="(player.initial || '') + (index + 1)"></strong>
-          </article>
-        </template>
+                readonly
+              />
+            </fieldset>
+          </template>
+        </div>
+        <div>
+          <template x-for="(player, index) in data.players.slice(midpointIndex)">
+            <fieldset class="player" role="group">
+              <button class="number townsfolk" x-text="(player.initial || '') + (index + midpointIndex + 1)"></button>
+              <input
+                :value="
+                player.status == 'alive' ?
+                '&#128516;' :
+                player.status == 'dead_vote' ?
+                '&#128128;' :
+                '&#10060;'"
+                readonly
+              />
+            </fieldset>
+          </template>
+        </div>
       </div>
       <article>
         <section>
@@ -45,7 +64,7 @@
         </section>
         <section><strong>Role counts</strong>: <span x-text="roleCounts"></span></section>
         <section class="mb-0">
-          <div><strong>Statuses</strong>:</div>
+          <div><strong>Legend</strong>:</div>
           <ul class="mb-0">
             <li>&#128516;: Alive</li>
             <li>&#128128;: Dead With Vote</li>

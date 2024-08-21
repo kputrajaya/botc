@@ -398,6 +398,9 @@
               return MARKERS[r].map((m) => (r ? shortRole + ' · ' : '') + m);
             });
         },
+        get midpointIndex() {
+          return Math.ceil(this.data.players.length / 2);
+        },
 
         // Method
         setInitial(player) {
