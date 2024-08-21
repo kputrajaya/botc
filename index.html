@@ -23,33 +23,36 @@
   <body x-data="botc" x-cloak>
     <!-- Town Square -->
     <main class="container" x-show="!isPub">
-      <summary class="title mb-1">
-        <h1>Pocket Town Square</h1>
-      </summary>
+      <div class="town-hall">
+        <template x-for="(player, index) in data.players">
+          <article class="text-center">
+            <h3
+              class="mb-1"
+              x-text="player.status == 'alive' ?
+                '&#128516;' :
+                player.status == 'dead_vote' ?
+                '&#128128;' :
+                '&#10060;'"
+            ></h3>
+            <strong x-text="(player.initial || '') + (index + 1)"></strong>
+          </article>
+        </template>
+      </div>
       <article>
         <section>
           <strong>Required votes</strong>: <span x-text="requiredVoteCount"></span> /
           <span x-text="alivePlayerCount"></span>
         </section>
-        <section class="mb-0"><strong>Role counts</strong>: <span x-text="roleCounts"></span></section>
-      </article>
-      <template x-for="(player, index) in data.players">
-        <section>
-          <fieldset class="player" role="group">
-            <button class="number" x-text="(player.initial || '') + (index + 1)"></button>
-            <input
-              :value="
-                player.status == 'alive' ?
-                '&#128516; &nbsp;-&nbsp; Alive' :
-                player.status == 'dead_vote' ?
-                '&#128128; &nbsp;-&nbsp; Dead With Vote' :
-                '&#128683; &nbsp;-&nbsp; Dead With No Vote'"
-              readonly
-            />
-          </fieldset>
-          <small class="markers"></small>
+        <section><strong>Role counts</strong>: <span x-text="roleCounts"></span></section>
+        <section class="mb-0">
+          <div><strong>Statuses</strong>:</div>
+          <ul class="mb-0">
+            <li>&#128516;: Alive</li>
+            <li>&#128128;: Dead With Vote</li>
+            <li>&#10060;: Dead With No Vote</li>
+          </ul>
         </section>
-      </template>
+      </article>
     </main>
 
     <!-- Grimoire -->
@@ -75,7 +78,7 @@
             </section>
             <section class="mb-0">
               <div><strong>Other nights</strong>:</div>
-              <ul x-show="otherNightsOrder.length">
+              <ul class="mb-0" x-show="otherNightsOrder.length">
                 <template x-for="role in otherNightsOrder">
                   <li x-text="role"></li>
                 </template>
@@ -101,7 +104,7 @@
                 <option value="dead_vote">&#128128;</option>
               </optgroup>
               <optgroup label="Dead With No Vote">
-                <option value="dead_no_vote">&#128683;</option>
+                <option value="dead_no_vote">&#10060;</option>
               </optgroup>
             </select>
             <select class="choose-role" x-model="player.role" @change="changeRole(player)">
@@ -154,7 +157,7 @@
     </main>
 
     <div class="sharer" x-show="data.sharer.active">
-      <div class="container pt-1">
+      <div class="container pt-2">
         <h5>Sharer</h5>
         <article>
           <div x-show="data.sharer.index &lt; data.players.length">
@@ -170,45 +173,45 @@
           <div x-show="data.sharer.index &gt;= data.players.length">
             All done! Return this device to the Storyteller.
           </div>
-          <button class="w-full mt-1" @click="sharerNext()">Next</button>
+          <button class="w-full mt-2" @click="sharerNext()">Next</button>
         </article>
       </div>
     </div>
 
     <div class="prompter" x-show="data.prompter.active">
-      <div class="container pt-1">
+      <div class="container pt-2">
         <h5>Prompter</h5>
         <article>
           <div class="grid">
-            <div class="mb-1">
+            <div class="mb-2">
               <button class="w-full" @click="promptText('This is\nthe Demon')">The Demon</button>
             </div>
-            <div class="mb-1">
+            <div class="mb-2">
               <button class="w-full" @click="promptText('These are\nyour minions')">Your minions</button>
             </div>
-            <div class="mb-1">
+            <div class="mb-2">
               <button class="w-full" @click="promptText('These characters are\nnot in play')">Not in play</button>
             </div>
           </div>
           <div class="grid">
-            <div class="mb-1">
+            <div class="mb-2">
               <button class="w-full" @click="promptText('You are')">You are</button>
             </div>
-            <div class="mb-1">
+            <div class="mb-2">
               <button class="w-full" @click="promptText('This player is')">This player is</button>
             </div>
-            <div class="mb-1">
+            <div class="mb-2">
               <button class="w-full" @click="promptText('This character\nselected you')">Selected you</button>
             </div>
           </div>
           <div class="grid">
-            <div class="mb-1">
+            <div class="mb-2">
               <button class="w-full" @click="promptText('Did you\nnominate today?')">Nominate today?</button>
             </div>
-            <div class="mb-1">
+            <div class="mb-2">
               <button class="w-full" @click="promptText('Did you\nvote today?')">Vote today?</button>
             </div>
-            <div class="mb-1"><button class="w-full" @click="promptCustom()">Custom</button></div>
+            <div class="mb-2"><button class="w-full" @click="promptCustom()">Custom</button></div>
           </div>
         </article>
         <article>
@@ -241,7 +244,7 @@
             </select>
           </template>
         </article>
-        <div class="mb-1 text-center"><a @click="togglePrompter()">Go back</a></div>
+        <div class="mb-2 text-center"><a @click="togglePrompter()">Go back</a></div>
       </div>
     </div>
     <div
