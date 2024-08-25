@@ -7,6 +7,15 @@ a {
   cursor: pointer;
 }
 
+h1 {
+  font-size: 1rem;
+}
+
+details summary {
+  line-height: var(--pico-line-height);
+}
+
+
 /* Attributes */
 [x-cloak] {
   display: none;
@@ -40,15 +49,6 @@ a {
 
 
 /* Components */
-.title h1 {
-  margin: 0;
-  font-size: 1.2rem;
-  display: inline-block;
-}
-.title::after {
-  margin-top: 0.2em;
-}
-
 .player > * {
   width: auto;
   height: auto !important;
@@ -133,6 +133,12 @@ a {
   grid-column-gap: var(--pico-block-spacing-horizontal);
   grid-row-gap: 0;
 }
-.town-square .player > .number {
-  width: 4em;
+.town-square article {
+  display: flex;
+  align-items: center;
+}
+.town-square article > h2 {
+  margin: calc(var(--pico-block-spacing-vertical) / 2) 0;
+  flex-grow: 1;
+  text-align: center;
 }

@@ -398,7 +398,7 @@
               return MARKERS[r].map((m) => (r ? shortRole + ' · ' : '') + m);
             });
         },
-        get midpointIndex() {
+        get playerMidIndex() {
           return Math.ceil(this.data.players.length / 2);
         },
 
@@ -521,7 +521,7 @@
         promptClear() {
           this.data.prompter.message = null;
         },
-        copyTownLink() {
+        copySquareLink() {
           copyText(`${window.location.href}?k=${this.subKey}`);
           notyf.success('Town square link copied!');
         },

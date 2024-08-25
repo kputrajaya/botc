@@ -23,37 +23,38 @@
   <body x-data="botc" x-cloak>
     <!-- Town Square -->
     <main class="container" x-show="!isPub">
+      <h1>Town Square</h1>
       <div class="town-square">
         <div>
-          <template x-for="(player, index) in data.players.slice(0, midpointIndex)">
-            <fieldset class="player" role="group">
-              <button class="number townsfolk" x-text="(player.initial || '') + (index + 1)"></button>
-              <input
-                :value="
-                player.status == 'alive' ?
-                '&#128516;' :
-                player.status == 'dead_vote' ?
-                '&#128128;' :
-                '&#10060;'"
-                readonly
-              />
-            </fieldset>
+          <template x-for="(player, index) in data.players.slice(0, playerMidIndex)">
+            <article>
+              <span x-text="(player.initial || '') + (index + 1)"></span>
+              <h2
+                class="mb-0"
+                x-text="
+                  player.status == 'alive' ?
+                  '&#128516;' :
+                  player.status == 'dead_vote' ?
+                  '&#128128;' :
+                  '&#10060;'"
+              ></h2>
+            </article>
           </template>
         </div>
         <div>
-          <template x-for="(player, index) in data.players.slice(midpointIndex)">
-            <fieldset class="player" role="group">
-              <button class="number townsfolk" x-text="(player.initial || '') + (index + midpointIndex + 1)"></button>
-              <input
-                :value="
-                player.status == 'alive' ?
-                '&#128516;' :
-                player.status == 'dead_vote' ?
-                '&#128128;' :
-                '&#10060;'"
-                readonly
-              />
-            </fieldset>
+          <template x-for="(player, index) in data.players.slice(playerMidIndex)">
+            <article>
+              <span x-text="(player.initial || '') + (index + playerMidIndex + 1)"></span>
+              <h2
+                class="mb-0"
+                x-text="
+                  player.status == 'alive' ?
+                  '&#128516;' :
+                  player.status == 'dead_vote' ?
+                  '&#128128;' :
+                  '&#10060;'"
+              ></h2>
+            </article>
           </template>
         </div>
       </div>
@@ -76,36 +77,7 @@
 
     <!-- Grimoire -->
     <main class="container" x-show="isPub">
-      <section>
-        <details>
-          <summary class="title">
-            <h1>Pocket Grimoire</h1>
-          </summary>
-          <article>
-            <section>
-              <strong>Required votes</strong>: <span x-text="requiredVoteCount"></span> /
-              <span x-text="alivePlayerCount"></span>
-            </section>
-            <section><strong>Role counts</strong>: <span x-text="roleCounts"></span></section>
-            <section>
-              <div><strong>First night</strong>:</div>
-              <ul x-show="firstNightOrder.length">
-                <template x-for="role in firstNightOrder">
-                  <li x-text="role"></li>
-                </template>
-              </ul>
-            </section>
-            <section class="mb-0">
-              <div><strong>Other nights</strong>:</div>
-              <ul class="mb-0" x-show="otherNightsOrder.length">
-                <template x-for="role in otherNightsOrder">
-                  <li x-text="role"></li>
-                </template>
-              </ul>
-            </section>
-          </article>
-        </details>
-      </section>
+      <h1>Grimoire</h1>
       <template x-for="(player, index) in data.players">
         <section>
           <fieldset class="player" role="group">
@@ -162,6 +134,33 @@
           </small>
         </section>
       </template>
+      <article>
+        <section>
+          <strong>Required votes</strong>: <span x-text="requiredVoteCount"></span> /
+          <span x-text="alivePlayerCount"></span>
+        </section>
+        <section><strong>Role counts</strong>: <span x-text="roleCounts"></span></section>
+        <details>
+          <summary class="title"><strong>First night</strong>: &hellip;</summary>
+          <section>
+            <ul>
+              <template x-for="role in firstNightOrder">
+                <li x-text="role"></li>
+              </template>
+            </ul>
+          </section>
+        </details>
+        <details class="mb-0">
+          <summary class="title"><strong>Other nights</strong>: &hellip;</summary>
+          <section class="mb-0">
+            <ul class="mb-0">
+              <template x-for="role in otherNightsOrder">
+                <li x-text="role"></li>
+              </template>
+            </ul>
+          </section>
+        </details>
+      </article>
       <div class="text-center">
         <a @click="shuffleRoles()">Shuffle</a>
         ·
@@ -169,7 +168,7 @@
         ·
         <a @click="togglePrompter()">Prompt</a>
         ·
-        <a @click="copyTownLink()">Display</a>
+        <a @click="copySquareLink()">Square</a>
         ·
         <a @click="reset()">Reset</a>
       </div>
