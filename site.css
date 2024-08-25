@@ -64,15 +64,11 @@ a {
   white-space: nowrap;
   overflow: hidden;
 }
-.player > .number.townsfolk {
+.player > .number.townsfolk,
+.player > .number.outsider {
   background: #0172AD;
 }
-.player > .number.outsider {
-  background: #655CD6;
-}
-.player > .number.minion {
-  background: #9C5900;
-}
+.player > .number.minion,
 .player > .number.demon {
   background: #BD3C13;
 }
