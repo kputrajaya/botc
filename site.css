@@ -138,7 +138,6 @@ details summary {
   align-items: center;
 }
 .town-square article > h2 {
-  margin: calc(var(--pico-block-spacing-vertical) / 2) 0;
   flex-grow: 1;
   text-align: center;
 }
