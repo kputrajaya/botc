@@ -21,6 +21,10 @@ details summary {
   display: none;
 }
 
+[\@click] {
+  cursor: pointer;
+}
+
 
 /* Utils */
 .w-full {
@@ -43,8 +47,21 @@ details summary {
   padding-top: var(--pico-block-spacing-vertical);
 }
 
+.text-danger {
+  color: #BD3C13;
+  text-decoration-color: #BD3C13;
+}
+
 .text-center {
   text-align: center;
+}
+
+.d-inline-block {
+  display: inline-block;
+}
+
+.float-end {
+  float: right;
 }
 
 

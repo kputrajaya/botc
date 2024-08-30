@@ -340,7 +340,7 @@
       // Copy using execCommand
       const el = document.createElement('textarea');
       el.style.opacity = 0;
-      document.body.appendChild(el);
+      document.body.prepend(el);
       el.value = text;
       el.focus();
       el.select();
@@ -521,9 +521,9 @@
         promptClear() {
           this.data.prompter.message = null;
         },
-        copySquareLink() {
+        copyTownSquareLink() {
           copyText(`${window.location.href}?k=${this.subKey}`);
-          notyf.success('Town square link copied!');
+          notyf.success('Link copied!');
         },
         reset() {
           const response = prompt('Reset game? Type "y" to continue.') || '';
@@ -572,58 +572,61 @@
             };
           };
 
-          this.subKey = this.subKey || Math.random().toString(36).substring(2);
+          // Connect as subscriber if Town Square
           const params = getParams();
           if (params.k) {
             this.isPub = false;
             connect('botc:' + params.k);
-          } else {
-            if (!this.data.players.length || !this.data.set) {
-              // Ask for player count
-              const minPlayer = 5;
-              const maxPlayer = 15;
-              let promptText = `How many players? (${minPlayer}-${maxPlayer})`;
-              let playerCount;
-              while (!(playerCount >= minPlayer && playerCount <= maxPlayer)) {
-                playerCount = Math.floor(prompt(promptText));
-              }
-              this.data.players = [];
-              const playerModelJson = JSON.stringify(PLAYER_MODEL);
-              for (let i = 0; i < playerCount; i++) {
-                this.data.players.push(JSON.parse(playerModelJson));
-              }
-
-              // Ask for edition
-              const keys = Object.keys(SETS);
-              const options = keys.map((key, index) => `${index + 1}. ${SETS[key].name}`);
-              promptText = `Which edition? (1-${keys.length})\n${options.join('\n')}`;
-              let edition;
-              while (!(edition >= 1 && edition <= keys.length)) {
-                edition = Math.floor(prompt(promptText));
-              }
-              this.data.set = keys[edition - 1];
-
-              // Randomize roles
-              const roleGroups = Object.values(this.set.roles);
-              const roleCounts = ROLE_COUNTS[this.data.players.length];
-              let lastPlayerIndex = 0;
-              roleCounts.forEach((roleCount, i) => {
-                const selectedRoles = roleGroups[i]
-                  .map((role, index) => ({ role, index }))
-                  .sort(() => Math.random() - 0.5)
-                  .slice(0, roleCount)
-                  .sort((a, b) => a.index - b.index)
-                  .map((item) => item.role);
-                selectedRoles.forEach((role, j) => {
-                  const player = this.data.players[lastPlayerIndex + j];
-                  player.role = role;
-                  this.changeRole(player);
-                });
-                lastPlayerIndex += roleCount;
-              });
-            }
-            connect('botc:' + this.subKey);
+            return;
           }
+
+          if (!this.data.players.length || !this.data.set) {
+            // Ask for player count
+            const minPlayer = 5;
+            const maxPlayer = 15;
+            let promptText = `How many players? (${minPlayer}-${maxPlayer})`;
+            let playerCount;
+            while (!(playerCount >= minPlayer && playerCount <= maxPlayer)) {
+              playerCount = Math.floor(prompt(promptText));
+            }
+            this.data.players = [];
+            const playerModelJson = JSON.stringify(PLAYER_MODEL);
+            for (let i = 0; i < playerCount; i++) {
+              this.data.players.push(JSON.parse(playerModelJson));
+            }
+
+            // Ask for edition
+            const keys = Object.keys(SETS);
+            const options = keys.map((key, index) => `${index + 1}. ${SETS[key].name}`);
+            promptText = `Which edition? (1-${keys.length})\n${options.join('\n')}`;
+            let edition;
+            while (!(edition >= 1 && edition <= keys.length)) {
+              edition = Math.floor(prompt(promptText));
+            }
+            this.data.set = keys[edition - 1];
+
+            // Randomize roles
+            const roleGroups = Object.values(this.set.roles);
+            const roleCounts = ROLE_COUNTS[this.data.players.length];
+            let lastPlayerIndex = 0;
+            roleCounts.forEach((roleCount, i) => {
+              const selectedRoles = roleGroups[i]
+                .map((role, index) => ({ role, index }))
+                .sort(() => Math.random() - 0.5)
+                .slice(0, roleCount)
+                .sort((a, b) => a.index - b.index)
+                .map((item) => item.role);
+              selectedRoles.forEach((role, j) => {
+                const player = this.data.players[lastPlayerIndex + j];
+                player.role = role;
+                this.changeRole(player);
+              });
+              lastPlayerIndex += roleCount;
+            });
+          }
+
+          this.subKey = this.subKey || Math.random().toString(36).substring(2);
+          connect('botc:' + this.subKey);
         },
       };
     });

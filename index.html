@@ -77,7 +77,10 @@
 
     <!-- Grimoire -->
     <main class="container" x-show="isPub">
-      <h1>Grimoire</h1>
+      <div>
+        <h1 class="d-inline-block">Grimoire</h1>
+        <a class="float-end" @click="copyTownSquareLink()"><small>Town Square</small></a>
+      </div>
       <template x-for="(player, index) in data.players">
         <section>
           <fieldset class="player" role="group">
@@ -168,9 +171,7 @@
         ·
         <a @click="togglePrompter()">Prompt</a>
         ·
-        <a @click="copySquareLink()">Square</a>
-        ·
-        <a @click="reset()">Reset</a>
+        <a class="text-danger" @click="reset()">Reset</a>
       </div>
     </main>
 
