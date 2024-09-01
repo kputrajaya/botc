@@ -47,11 +47,11 @@ Optionally, you can skip it altogether and use physical tokens to display player
 
 To change players' status, click the status dropdown (showing "&#128516;" by default). This will be reflected immediately on the town square.
 
-### Tokens
+### Markers
 
-To add or remove tokens, click the token dropdown (showing "&#9999;&#65039;"). Selecting a non-existing token will add it, while selecting an existing one will remove it.
+To add or remove markers, click the marker dropdown (showing "&#9999;&#65039;"). Selecting a non-existing marker will add it, while selecting an existing one will remove it.
 
-Note that role-specific tokens (e.g., Monk's "Safe" token) are considered unique, so marking a player with it will remove the same token from another player, if any.
+Note that role-specific markers (e.g., Monk's "Safe" marker) are considered unique, so marking a player with it will remove the same marker from another player, if any.
 
 ### Night Order
 
