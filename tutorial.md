@@ -2,7 +2,7 @@
 
 ## Overview
 
-Blood on the Clocktower (BOTC) is a game of murder, mystery, deduction, and deception. It's a social game with unique good and evil roles, similar to Werewolf or Mafia. The good team wins if they can execute the demon, while the evil team wins if they can wipe out the village.
+[Blood on the Clocktower](https://bloodontheclocktower.com/) (BOTC) is a game of murder, mystery, deduction, and deception. It's a social game with unique good and evil roles, similar to Werewolf or Mafia. The good team wins if they can execute the demon, while the evil team wins if they can wipe out the village.
 
 Using this app, you can play BOTC _without_ physical components. The Storyteller (ST) will use one device as the Grimoire (dashboard), while the players can designate another device to display the town square. This tutorial is **targeted to the ST**.
 
