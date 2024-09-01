@@ -71,4 +71,4 @@ Role prompts on the bottom is used by selecting 1&ndash;3 roles to display _befo
 
 ## Ending the Game
 
-When you wish to end the game, click the **"Reset"** button on the bottom. This will reset the app and you can start a new game.
+When you wish to end the game, click the **"Reset"** button on the bottom. This will reset the data so you can start a new game.
