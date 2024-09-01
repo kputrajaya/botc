@@ -6,7 +6,7 @@ Using [Pocket Grimoire](https://botc.kvn.ovh), you can play BOTC _without_ physi
 
 This tutorial is **targeted to the ST** who wants to use this app to play BOTC.
 
-![Overview](files/tutorial-overview.jpg)
+![Overview](tutorial-overview.jpg)
 
 ## Setting Up
 
@@ -21,7 +21,7 @@ Upon opening the app, you will be prompted the **number of players** and **the e
 
 The app will then generate a list of players numbered 1&ndash;N. You must **associate these numbers** to the players. Optionally, you can click on each number to **assign an initial**.
 
-![Initials](files/tutorial-initials.jpg)
+![Initials](tutorial-initials.jpg)
 
 ### Role Selection
 
@@ -31,13 +31,13 @@ The app preselects random roles to **fulfill the required role counts**, without
 
 After selecting the roles, you should click the **"Shuffle"** button on the bottom to shuffle the roles randomly to the players. Then, click the **"Share"** button to secretly and carefully share the roles with the players, in sequence.
 
-![Sharer](files/tutorial-sharer.jpg)
+![Sharer](tutorial-sharer.jpg)
 
 ### Town Square
 
 If you click the **"Town Square"** button at the top-right corner, a link will be copied to your clipboard. You can **share this link** with the players, so they can access the town square. The town square will display the players' status _in sync_ with the Grimoire, plus some other useful information.
 
-![Town Square](files/tutorial-townsquare.jpg)
+![Town Square](tutorial-townsquare.jpg)
 
 Optionally, you can skip it altogether and use physical tokens to display players' status.
 
@@ -47,7 +47,7 @@ Optionally, you can skip it altogether and use physical tokens to display player
 
 To change players' status, click the status dropdown (showing "&#128516;" by default). This will be reflected immediately on the town square.
 
-![Status](files/tutorial-status.jpg)
+![Status](tutorial-status.jpg)
 
 ### Markers
 
@@ -59,7 +59,7 @@ Note that role-specific markers (e.g., Monk's "Safe" marker) are considered uniq
 
 Night order for abilities (both first and other nights) can be viewed in an accordion on the bottom.
 
-![Night Order](files/tutorial-nightorder.jpg)
+![Night Order](tutorial-nightorder.jpg)
 
 ### Prompts
 
@@ -67,7 +67,7 @@ To replace cardboard prompts during the nights (e.g., "This is the Demon"), clic
 
 Role prompts on the bottom is used by selecting 1&ndash;3 roles to display _before_ clicking the **"Role tokens"** button. Use this to give unused roles to the Demon, info for Washerwoman, etc.
 
-![Prompter](files/tutorial-prompter.jpg)
+![Prompter](tutorial-prompter.jpg)
 
 ## Ending the Game
 
