@@ -1,12 +1,12 @@
 # Pocket Grimoire Tutorial
 
-![Overview](files/tutorial-overview.jpg)
-
 [Blood on the Clocktower](https://bloodontheclocktower.com/) (BOTC) is a game of murder, mystery, deduction, and deception. It's a social game with unique good and evil roles, similar to Werewolf or Mafia. The good team wins if they can execute the demon, while the evil team wins if they can wipe out the village.
 
 Using [Pocket Grimoire](https://botc.kvn.ovh), you can play BOTC _without_ physical components (having role sheets is still recommended). The Storyteller (ST) will use one device as the Grimoire (dashboard), while the players can utilize another device to display the town square.
 
 This tutorial is **targeted to the ST** who wants to use this app to play BOTC.
+
+![Overview](files/tutorial-overview.jpg)
 
 ## Setting Up
 
@@ -25,7 +25,7 @@ The app will then generate a list of players numbered 1&ndash;N. You must **asso
 
 ### Role Selection
 
-The app preselects random roles to **fulfill the required role counts**. You can use it as a baseline and adjust it to your liking. Note that the requirement is always displayed on the bottom:
+The app preselects random roles to **fulfill the required role counts**, without considering modifiers. You can use it as a baseline, and adjust it to your preference. Note that the requirement is also displayed on the bottom:
 
 > **Role counts**: [Townsfolk] - [Outsider] - [Minion] - [Demon]
 
