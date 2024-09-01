@@ -47,6 +47,8 @@ Optionally, you can skip it altogether and use physical tokens to display player
 
 To change players' status, click the status dropdown (showing "&#128516;" by default). This will be reflected immediately on the town square.
 
+![Status](files/tutorial-status.jpg)
+
 ### Markers
 
 To add or remove markers, click the marker dropdown (showing "&#9999;&#65039;"). Selecting a non-existing marker will add it, while selecting an existing one will remove it.
