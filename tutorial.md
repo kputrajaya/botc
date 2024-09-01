@@ -37,7 +37,7 @@ The players will now know their roles and the game can begin.
 
 ### Town Square
 
-If you click the **"Town Square"** button at the top-right corner, a link will be copied to your clipboard. You can share this link with the players, so they can access the town square. The town square will display the players' status _in sync_ with the Grimoire, plus some other useful information.
+If you click the **"Town Square"** button at the top-right corner, a link will be copied to your clipboard. You can **share this link** with the players, so they can access the town square. The town square will display the players' status _in sync_ with the Grimoire, plus some other useful information.
 
 Optionally, you can skip it altogether and use physical tokens to display players' status.
 
