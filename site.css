@@ -64,6 +64,10 @@ details summary {
   float: right;
 }
 
+.c-help {
+  cursor: help;
+}
+
 
 /* Components */
 .player > * {
