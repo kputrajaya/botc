@@ -14,14 +14,14 @@ This tutorial is **targeted to the ST** who wants to use this app to play BOTC.
 
 ### Players and Editions
 
-Upon opening the app, you will be prompted the **number of players** and **the edition** of the game. Currently, the app supports 5&ndash;15 players (travellers are not supported) and 4 editions:
+Upon opening the app, you will be prompted the **number of players** and **the edition** of the game. Currently, the app supports 5–15 players (travellers are not supported) and 4 editions:
 
 1. [Trouble Brewing](https://botc.kvn.ovh/files/tb.pdf)
 2. [Bad Moon Rising](https://botc.kvn.ovh/files/bmr.pdf)
 3. [Sects & Violet](https://botc.kvn.ovh/files/sv.pdf)
-4. [No Greater Joy](https://botc.kvn.ovh/files/ngj.pdf) (custom [Teensyville](https://wiki.bloodontheclocktower.com/Teensyville) game for 5&ndash;6 players)
+4. [No Greater Joy](https://botc.kvn.ovh/files/ngj.pdf) (custom [Teensyville](https://wiki.bloodontheclocktower.com/Teensyville) game for 5–6 players)
 
-The app will then generate a list of players numbered 1&ndash;N. You must **associate these numbers** to the players. Optionally, you can click on each number to **assign an initial**.
+The app will then generate a list of players numbered 1–N. You must **associate these numbers** to the players. Optionally, you can click on each number to **assign an initial**.
 
 ![Initials](tutorial-initials.jpg)
 
@@ -47,13 +47,13 @@ Optionally, you can skip it altogether and use physical tokens to display player
 
 ### Status
 
-To change players' status, click the status dropdown (showing smile emoji by default). This will be reflected immediately on the town square.
+To change players' status, click the status dropdown (showing _smile_ emoji by default). This will be reflected immediately on the town square.
 
 ![Status](tutorial-status.jpg)
 
 ### Markers
 
-To add or remove markers, click the marker dropdown (showing pencil emoji). Selecting a non-existing marker will add it, while selecting an existing one will remove it.
+To add or remove markers, click the marker dropdown (showing _pencil_ emoji). Selecting a non-existing marker will add it, while selecting an existing one will remove it.
 
 Note that role-specific markers (e.g., Monk's "Safe" marker) are considered unique, so marking a player with it will remove the same marker from another player, if any.
 
@@ -67,7 +67,7 @@ Night order for abilities (both first and other nights) can be viewed in an acco
 
 To replace cardboard prompts during the nights (e.g., "This is the Demon"), click the **"Prompt"** button on the bottom. You will be presented with a list of available prompts, as well as an option to create a custom one.
 
-Role prompts on the bottom is used by selecting 1&ndash;3 roles to display _before_ clicking the **"Role tokens"** button. Use this to give unused roles to the Demon, info for Washerwoman, etc.
+Role prompts on the bottom is used by selecting 1–3 roles to display _before_ clicking the **"Role tokens"** button. Use this to give unused roles to the Demon, info for Washerwoman, etc.
 
 ![Prompter](tutorial-prompter.jpg)
 
