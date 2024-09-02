@@ -1,3 +1,5 @@
+<!-- ghmd tutorial.md --embed-css --dark -->
+
 # Pocket Grimoire Tutorial
 
 [Blood on the Clocktower](https://bloodontheclocktower.com/) (BOTC) is a game of murder, mystery, deduction, and deception. It's a social game with unique good and evil roles, similar to Werewolf or Mafia. The good team wins if they can execute the demon, while the evil team wins if they can wipe out the village.
@@ -45,13 +47,13 @@ Optionally, you can skip it altogether and use physical tokens to display player
 
 ### Status
 
-To change players' status, click the status dropdown (showing "&#128516;" by default). This will be reflected immediately on the town square.
+To change players' status, click the status dropdown (showing smile emoji by default). This will be reflected immediately on the town square.
 
 ![Status](tutorial-status.jpg)
 
 ### Markers
 
-To add or remove markers, click the marker dropdown (showing "&#9999;&#65039;"). Selecting a non-existing marker will add it, while selecting an existing one will remove it.
+To add or remove markers, click the marker dropdown (showing pencil emoji). Selecting a non-existing marker will add it, while selecting an existing one will remove it.
 
 Note that role-specific markers (e.g., Monk's "Safe" marker) are considered unique, so marking a player with it will remove the same marker from another player, if any.
 
