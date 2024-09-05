@@ -67,7 +67,7 @@ Night order for abilities (both first and other nights) can be viewed in an acco
 
 To replace cardboard prompts during the nights (e.g., "This is the Demon"), click the **"Prompt"** button on the bottom. You will be presented with a list of available prompts, as well as an option to create a custom one.
 
-Role prompts on the bottom is used by selecting 1–3 roles to display _before_ clicking the **"Role tokens"** button. Use this to give unused roles to the Demon, info for Washerwoman, etc.
+Role prompts below can be used to share not-in-play roles to the Demon, information for Washerwoman, etc.
 
 ![Prompter](tutorial-prompter.jpg)
 
