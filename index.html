@@ -208,7 +208,10 @@
 
     <div class="prompter" x-show="data.prompter.active">
       <div class="container pt-2">
-        <h5>Prompter</h5>
+        <div>
+          <h5 class="d-inline-block">Prompter</h5>
+          <a class="float-end" @click="togglePrompter()"><small>Close</small></a>
+        </div>
         <article>
           <div class="row">
             <div class="col-xs-4 col-md-3 mb-2">
@@ -250,7 +253,6 @@
             </div>
           </article>
         </template>
-        <div class="mb-2 text-center"><a @click="togglePrompter()">Go back</a></div>
       </div>
     </div>
     <div
