@@ -304,7 +304,6 @@
     },
     prompter: {
       active: false,
-      roles: [null, null, null],
       message: null,
     },
   };
@@ -504,14 +503,6 @@
         },
         promptText(message) {
           this.data.prompter.message = message;
-        },
-        promptRoles() {
-          const roles = this.data.prompter.roles.filter(Boolean).join('\n');
-          if (!roles) {
-            notyf.error('Choose roles first!');
-            return;
-          }
-          this.data.prompter.message = roles;
         },
         promptCustom() {
           const message = prompt('What is your message?');
