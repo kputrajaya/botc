@@ -244,7 +244,7 @@
             <div class="row">
               <template x-for="role in group">
                 <div class="col-xs-4 col-md-3 mb-2">
-                  <button @click="promptText(role)" x-text="role"></button>
+                  <button @click="promptText(role.replace(/\s/g, '\n'))" x-text="role"></button>
                 </div>
               </template>
             </div>
