@@ -55,6 +55,10 @@ details summary {
   color: #BD3C13;
   text-decoration-color: #BD3C13;
 }
+.text-secondary {
+  color: #515865;
+  text-decoration-color: #515865;
+}
 
 .text-center {
   text-align: center;

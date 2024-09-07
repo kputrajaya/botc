@@ -151,7 +151,7 @@
           <section>
             <ul>
               <template x-for="role in firstNightOrder">
-                <li x-text="role"></li>
+                <li :class="{'text-secondary': !role.chosen }" x-text="role.name"></li>
               </template>
             </ul>
           </section>
@@ -161,7 +161,7 @@
           <section class="mb-0">
             <ul class="mb-0">
               <template x-for="role in otherNightsOrder">
-                <li x-text="role"></li>
+                <li :class="{'text-secondary': !role.chosen }" x-text="role.name"></li>
               </template>
             </ul>
           </section>
@@ -185,7 +185,7 @@
           <div x-show="data.sharer.index &lt; data.players.length">
             <div x-show="!data.sharer.show">
               <div class="mb-1">
-                Pass this device to <strong>P<span x-text="data.sharer.index + 1"></span></strong>.
+                Pass the device to <strong>P<span x-text="data.sharer.index + 1"></span></strong>.
               </div>
               <div>Then reveal your role by pressing Next.</div>
             </div>
@@ -199,7 +199,7 @@
           </div>
           <div x-show="data.sharer.index &gt;= data.players.length">
             <div class="mb-1">All done!</div>
-            <div>Return this device to the <strong>Storyteller</strong>.</div>
+            <div>Return the device to the <strong>Storyteller</strong>.</div>
           </div>
           <button class="w-full mt-2" @click="sharerNext()">Next</button>
         </article>
@@ -214,31 +214,31 @@
         </div>
         <article>
           <div class="row">
-            <div class="col-xs-4 col-md-3 mb-2">
+            <div class="col-xs-4 col-sm-3 col-md-2 mb-2">
               <button @click="promptText('This is\nthe Demon')">Demon</button>
             </div>
-            <div class="col-xs-4 col-md-3 mb-2">
+            <div class="col-xs-4 col-sm-3 col-md-2 mb-2">
               <button @click="promptText('These are\nyour minions')">Minions</button>
             </div>
-            <div class="col-xs-4 col-md-3 mb-2">
+            <div class="col-xs-4 col-sm-3 col-md-2 mb-2">
               <button @click="promptText('You are')">You are</button>
             </div>
-            <div class="col-xs-4 col-md-3 mb-2">
+            <div class="col-xs-4 col-sm-3 col-md-2 mb-2">
               <button @click="promptText('This player is')">This is</button>
             </div>
-            <div class="col-xs-4 col-md-3 mb-2">
+            <div class="col-xs-4 col-sm-3 col-md-2 mb-2">
               <button @click="promptText('These characters are\nnot in play')">Not in play</button>
             </div>
-            <div class="col-xs-4 col-md-3 mb-2">
+            <div class="col-xs-4 col-sm-3 col-md-2 mb-2">
               <button @click="promptText('This character\nselected you')">Selected</button>
             </div>
-            <div class="col-xs-4 col-md-3 mb-2">
+            <div class="col-xs-4 col-sm-3 col-md-2 mb-2">
               <button @click="promptText('Did you\nnominate today?')">Nominate?</button>
             </div>
-            <div class="col-xs-4 col-md-3 mb-2">
+            <div class="col-xs-4 col-sm-3 col-md-2 mb-2">
               <button @click="promptText('Did you\nvote today?')">Vote?</button>
             </div>
-            <div class="col-xs-4 col-md-3 mb-2"><button @click="promptCustom()">Custom</button></div>
+            <div class="col-xs-4 col-sm-3 col-md-2 mb-2"><button @click="promptCustom()">(Custom)</button></div>
           </div>
         </article>
 
@@ -246,7 +246,7 @@
           <article>
             <div class="row">
               <template x-for="role in group">
-                <div class="col-xs-4 col-md-3 mb-2">
+                <div class="col-xs-4 col-sm-3 col-md-2 mb-2">
                   <button @click="promptText(role.replace(/\s/g, '\n'))" x-text="role"></button>
                 </div>
               </template>

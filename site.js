@@ -377,16 +377,30 @@
         get requiredVoteCount() {
           return Math.ceil(this.alivePlayerCount / 2);
         },
+        get setRoles() {
+          const roles = this.set.roles;
+          return new Set(
+            Object.keys(roles)
+              .map((g) => roles[g])
+              .flat()
+          );
+        },
         get chosenRoles() {
           return new Set(this.data.players.map((p) => p.role).filter(Boolean));
         },
         get firstNightOrder() {
+          const setRoles = this.setRoles;
           const chosenRoles = this.chosenRoles;
-          return ORDERS.firstNight.filter((r) => chosenRoles.has(r) || r.startsWith('('));
+          return ORDERS.firstNight
+            .filter((r) => setRoles.has(r) || r.startsWith('('))
+            .map((r) => ({ name: r, chosen: chosenRoles.has(r) || r.startsWith('(') }));
         },
         get otherNightsOrder() {
+          const setRoles = this.setRoles;
           const chosenRoles = this.chosenRoles;
-          return ORDERS.otherNights.filter((r) => chosenRoles.has(r));
+          return ORDERS.otherNights
+            .filter((r) => setRoles.has(r))
+            .map((r) => ({ name: r, chosen: chosenRoles.has(r) }));
         },
         get availableMarkers() {
           const chosenRoles = this.chosenRoles;
@@ -588,7 +602,7 @@
 
             // Ask for edition
             const keys = Object.keys(SETS);
-            const options = keys.map((key, index) => `${index + 1}. ${SETS[key].name}`);
+            const options = keys.map((k, i) => `${i + 1}. ${SETS[k].name}`);
             promptText = `Which edition? (1-${keys.length})\n${options.join('\n')}`;
             let edition;
             while (!(edition >= 1 && edition <= keys.length)) {
@@ -607,9 +621,9 @@
                 .slice(0, roleCount)
                 .sort((a, b) => a.index - b.index)
                 .map((item) => item.role);
-              selectedRoles.forEach((role, j) => {
+              selectedRoles.forEach((r, j) => {
                 const player = this.data.players[lastPlayerIndex + j];
-                player.role = role;
+                player.role = r;
                 this.changeRole(player);
               });
               lastPlayerIndex += roleCount;
