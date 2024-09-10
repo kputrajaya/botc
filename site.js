@@ -555,7 +555,7 @@
               interval = setInterval(() => {
                 console.log('Sending data (interval)');
                 ws.send(JSON.stringify({ action: 'pub', key: subKey, data: this.data }));
-              }, 30000);
+              }, 60000);
             } else {
               ws.onopen = () => {
                 console.log('Subscribing to:', subKey);
