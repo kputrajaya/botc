@@ -130,6 +130,7 @@ details summary {
 }
 .markers > kbd {
   margin: calc(var(--pico-spacing) * 0.5) calc(var(--pico-spacing) * 0.5) 0 0;
+  padding: calc(var(--pico-spacing) * 0.2) calc(var(--pico-spacing) * 0.3);
   font-size: 0.6rem;
   font-weight: 400;
   cursor: pointer;
@@ -151,7 +152,7 @@ details summary {
 }
 .prompter button {
   width: 100%;
-  padding: 0.5rem;
+  padding: calc(var(--pico-spacing) * 0.3) calc(var(--pico-spacing) * 0.5);
   font-size: 0.8rem;
   white-space: nowrap;
   overflow: hidden;
@@ -176,7 +177,7 @@ details summary {
 }
 
 .town-square article {
-  padding: 0.8rem;
+  padding: calc(var(--pico-spacing) * 0.5);
   display: flex;
   align-items: center;
 }

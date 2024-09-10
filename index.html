@@ -70,7 +70,7 @@
         <a class="c-help" href="files/tutorial.html" target="_blank">
           <h1 class="d-inline-block">Grimoire</h1>
         </a>
-        <a class="float-end" @click="copyTownSquareLink()"><small>Town Square</small></a>
+        <a :href="`?k=${subKey}`" class="float-end" @click.prevent="copySquareLink()"><small>Town Square</small></a>
       </div>
       <div class="grimoire">
         <template

@@ -526,7 +526,7 @@
         promptClear() {
           this.data.prompter.message = null;
         },
-        copyTownSquareLink() {
+        copySquareLink() {
           copyText(`${window.location.href}?k=${this.subKey}`);
           notyf.success('Link copied!');
         },
