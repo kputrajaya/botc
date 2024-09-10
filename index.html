@@ -26,38 +26,26 @@
     <main class="container" x-show="!isPub">
       <h1>Town Square</h1>
       <div class="town-square">
-        <div>
-          <template x-for="(player, index) in data.players.slice(0, playerMidIndex)">
-            <article>
-              <span x-text="(player.initial || '') + (index + 1)"></span>
-              <h2
-                class="mb-0"
-                x-text="
+        <template
+          x-for="(group, groupIndex) in [data.players.slice(0, playerMidIndex), data.players.slice(playerMidIndex)]"
+        >
+          <div>
+            <template x-for="(player, index) in group">
+              <article>
+                <span x-text="(player.initial || '') + (index + groupIndex * playerMidIndex + 1)"></span>
+                <h2
+                  class="mb-0"
+                  x-text="
                   player.status == 'alive' ?
                   '&#127765;' :
                   player.status == 'dead_vote' ?
                   '&#127762;' :
                   '&#127761;'"
-              ></h2>
-            </article>
-          </template>
-        </div>
-        <div>
-          <template x-for="(player, index) in data.players.slice(playerMidIndex)">
-            <article>
-              <span x-text="(player.initial || '') + (index + playerMidIndex + 1)"></span>
-              <h2
-                class="mb-0"
-                x-text="
-                  player.status == 'alive' ?
-                  '&#127765;' :
-                  player.status == 'dead_vote' ?
-                  '&#127762;' :
-                  '&#127761;'"
-              ></h2>
-            </article>
-          </template>
-        </div>
+                ></h2>
+              </article>
+            </template>
+          </div>
+        </template>
       </div>
       <article>
         <section>
@@ -84,62 +72,70 @@
         </a>
         <a class="float-end" @click="copyTownSquareLink()"><small>Town Square</small></a>
       </div>
-      <template x-for="(player, index) in data.players">
-        <section>
-          <fieldset class="player" role="group">
-            <button
-              class="number"
-              :class="player.group"
-              x-text="(player.initial || '') + (index + 1)"
-              @click="setInitial(player)"
-            ></button>
-            <select class="status" x-model="player.status">
-              <optgroup label="Alive">
-                <option value="alive">&#127765;</option>
-              </optgroup>
-              <optgroup label="Dead With Vote">
-                <option value="dead_vote">&#127762;</option>
-              </optgroup>
-              <optgroup label="Dead With No Vote">
-                <option value="dead_no_vote">&#127761;</option>
-              </optgroup>
-            </select>
-            <select class="choose-role" x-model="player.role" @change="changeRole(player)">
-              <optgroup label="Townsfolk">
-                <template x-for="role in set.roles.townsfolk">
-                  <option :value="role" :selected="player.role === role" x-text="role"></option>
-                </template>
-              </optgroup>
-              <optgroup label="Outsider">
-                <template x-for="role in set.roles.outsider">
-                  <option :value="role" :selected="player.role === role" x-text="role"></option>
-                </template>
-              </optgroup>
-              <optgroup label="Minion">
-                <template x-for="role in set.roles.minion">
-                  <option :value="role" :selected="player.role === role" x-text="role"></option>
-                </template>
-              </optgroup>
-              <optgroup label="Demon">
-                <template x-for="role in set.roles.demon">
-                  <option :value="role" :selected="player.role === role" x-text="role"></option>
-                </template>
-              </optgroup>
-            </select>
-            <select class="add-marker" x-model="player.addedMarker" @change="addMarker(player)">
-              <option value="">&#9999;&#65039;</option>
-              <template x-for="marker in availableMarkers">
-                <option :value="marker" x-text="marker"></option>
-              </template>
-            </select>
-          </fieldset>
-          <small class="markers">
-            <template x-for="marker in player.markers">
-              <kbd x-text="marker" @click="removeMarker(player, marker)" title="Remove marker"></kbd>
+      <div class="grimoire">
+        <template
+          x-for="(group, groupIndex) in [data.players.slice(0, playerMidIndex), data.players.slice(playerMidIndex)]"
+        >
+          <div>
+            <template x-for="(player, index) in group">
+              <section>
+                <fieldset class="player" role="group">
+                  <button
+                    class="number"
+                    :class="player.group"
+                    x-text="(player.initial || '') + (index + groupIndex * playerMidIndex + 1)"
+                    @click="setInitial(player)"
+                  ></button>
+                  <select class="status" x-model="player.status">
+                    <optgroup label="Alive">
+                      <option value="alive">&#127765;</option>
+                    </optgroup>
+                    <optgroup label="Dead With Vote">
+                      <option value="dead_vote">&#127762;</option>
+                    </optgroup>
+                    <optgroup label="Dead With No Vote">
+                      <option value="dead_no_vote">&#127761;</option>
+                    </optgroup>
+                  </select>
+                  <select class="choose-role" x-model="player.role" @change="changeRole(player)">
+                    <optgroup label="Townsfolk">
+                      <template x-for="role in set.roles.townsfolk">
+                        <option :value="role" :selected="player.role === role" x-text="role"></option>
+                      </template>
+                    </optgroup>
+                    <optgroup label="Outsider">
+                      <template x-for="role in set.roles.outsider">
+                        <option :value="role" :selected="player.role === role" x-text="role"></option>
+                      </template>
+                    </optgroup>
+                    <optgroup label="Minion">
+                      <template x-for="role in set.roles.minion">
+                        <option :value="role" :selected="player.role === role" x-text="role"></option>
+                      </template>
+                    </optgroup>
+                    <optgroup label="Demon">
+                      <template x-for="role in set.roles.demon">
+                        <option :value="role" :selected="player.role === role" x-text="role"></option>
+                      </template>
+                    </optgroup>
+                  </select>
+                  <select class="add-marker" x-model="player.addedMarker" @change="addMarker(player)">
+                    <option value="">&#9999;&#65039;</option>
+                    <template x-for="marker in availableMarkers">
+                      <option :value="marker" x-text="marker"></option>
+                    </template>
+                  </select>
+                </fieldset>
+                <small class="markers">
+                  <template x-for="marker in player.markers">
+                    <kbd x-text="marker" @click="removeMarker(player, marker)" title="Remove marker"></kbd>
+                  </template>
+                </small>
+              </section>
             </template>
-          </small>
-        </section>
-      </template>
+          </div>
+        </template>
+      </div>
       <article>
         <section>
           <strong>Required votes</strong>: <span x-text="requiredVoteCount"></span> /
@@ -247,7 +243,7 @@
             <div class="row">
               <template x-for="role in group">
                 <div class="col-xs-4 col-sm-3 col-md-2 mb-2">
-                  <button @click="promptText(role.replace(/\s/g, '\n'))" x-text="role"></button>
+                  <button @click="promptText(role.replace(/\s/g, '\n'))"><div x-text="role"></div></button>
                 </div>
               </template>
             </div>

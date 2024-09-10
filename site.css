@@ -8,7 +8,7 @@ a {
 }
 
 h1 {
-  font-size: 1rem;
+  font-size: 1.125rem;
 }
 
 small {
@@ -78,14 +78,26 @@ details summary {
 
 
 /* Components */
+.grimoire,
+.town-square {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: var(--pico-block-spacing-horizontal);
+  grid-row-gap: 0;
+}
+
 .player > * {
   width: auto;
   height: auto !important;
-  padding: 0.4em 2em 0.4em 0.6em !important;
+  padding: 0.5em !important;
+  font-size: 0.8rem;
   flex: initial !important;
 }
+.player > select {
+  background-image: none;
+}
 .player > .number {
-  width: 2.5em;
+  width: 2.4em;
   padding: 0 !important;
   background: #646B79;
   border: 0;
@@ -103,13 +115,12 @@ details summary {
 }
 .player > .status,
 .player > .add-marker {
-  width: 4em;
+  width: 2.4em;
 }
 .player > .choose-role {
   width: 0;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
   flex: 1 1 auto !important;
 }
 
@@ -144,7 +155,10 @@ details summary {
   font-size: 0.8rem;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+}
+.prompter button > div {
+  white-space: nowrap;
+  overflow: hidden;
 }
 .prompter-message {
   font-size: 2.4rem;
@@ -161,13 +175,8 @@ details summary {
   cursor: pointer;
 }
 
-.town-square {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-column-gap: var(--pico-block-spacing-horizontal);
-  grid-row-gap: 0;
-}
 .town-square article {
+  padding: 0.8rem;
   display: flex;
   align-items: center;
 }
