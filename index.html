@@ -34,10 +34,10 @@
                 class="mb-0"
                 x-text="
                   player.status == 'alive' ?
-                  '&#128516;' :
+                  '&#127765;' :
                   player.status == 'dead_vote' ?
-                  '&#128128;' :
-                  '&#10060;'"
+                  '&#127762;' :
+                  '&#127761;'"
               ></h2>
             </article>
           </template>
@@ -50,10 +50,10 @@
                 class="mb-0"
                 x-text="
                   player.status == 'alive' ?
-                  '&#128516;' :
+                  '&#127765;' :
                   player.status == 'dead_vote' ?
-                  '&#128128;' :
-                  '&#10060;'"
+                  '&#127762;' :
+                  '&#127761;'"
               ></h2>
             </article>
           </template>
@@ -68,9 +68,9 @@
         <section class="mb-0">
           <div><strong>Legend</strong>:</div>
           <ul class="mb-0">
-            <li>&#128516;: Alive</li>
-            <li>&#128128;: Dead With Vote</li>
-            <li>&#10060;: Dead With No Vote</li>
+            <li>&#127765;: Alive</li>
+            <li>&#127762;: Dead With Vote</li>
+            <li>&#127761;: Dead With No Vote</li>
           </ul>
         </section>
       </article>
@@ -95,13 +95,13 @@
             ></button>
             <select class="status" x-model="player.status">
               <optgroup label="Alive">
-                <option value="alive">&#128516;</option>
+                <option value="alive">&#127765;</option>
               </optgroup>
               <optgroup label="Dead With Vote">
-                <option value="dead_vote">&#128128;</option>
+                <option value="dead_vote">&#127762;</option>
               </optgroup>
               <optgroup label="Dead With No Vote">
-                <option value="dead_no_vote">&#10060;</option>
+                <option value="dead_no_vote">&#127761;</option>
               </optgroup>
             </select>
             <select class="choose-role" x-model="player.role" @change="changeRole(player)">
