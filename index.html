@@ -31,18 +31,23 @@
         >
           <div>
             <template x-for="(player, index) in group">
-              <article>
-                <span x-text="(player.initial || '') + (index + groupIndex * playerMidIndex + 1)"></span>
-                <h2
-                  class="mb-0"
-                  x-text="
+              <fieldset class="player" role="group">
+                <button
+                  class="number"
+                  x-text="(player.initial || '') + (index + groupIndex * playerMidIndex + 1)"
+                  disabled
+                ></button>
+                <input
+                  class="fs-4 text-center"
+                  :value="
                   player.status == 'alive' ?
                   '&#127765;' :
                   player.status == 'dead_vote' ?
                   '&#127762;' :
                   '&#127761;'"
-                ></h2>
-              </article>
+                  readonly
+                />
+              </fieldset>
             </template>
           </div>
         </template>

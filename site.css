@@ -51,6 +51,10 @@ details summary {
   padding-top: var(--pico-block-spacing-vertical);
 }
 
+.fs-4 {
+  font-size: 1.265rem !important;
+}
+
 .text-danger {
   color: #BD3C13;
   text-decoration-color: #BD3C13;
@@ -104,6 +108,9 @@ details summary {
   opacity: 1;
   white-space: nowrap;
   overflow: hidden;
+}
+.town-square .player > .number {
+  width: 4em;
 }
 .player > .number.townsfolk,
 .player > .number.outsider {
