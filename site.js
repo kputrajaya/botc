@@ -211,7 +211,7 @@
     Vortox: ['Dead'],
     Washerwoman: ['Townsfolk', 'Wrong'],
     Zombuul: ['Died Today', 'Dead'],
-    '': ['Is The Drunk', 'Good', 'Evil'],
+    '': ['Is The Drunk', 'Good*', 'Evil*'],
   };
   const SETS = {
     tb: {
@@ -407,7 +407,11 @@
           return Object.keys(MARKERS)
             .filter((r) => r === '' || chosenRoles.has(r))
             .flatMap((r) => {
-              let shortRole = r.replace(/\s/g, '').substring(0, 5).toUpperCase();
+              let shortRole = r
+                .replace(/[^A-Za-z]/g, ' ')
+                .split(' ')[0]
+                .substring(0, 5)
+                .toUpperCase();
               return MARKERS[r].map((m) => (r ? shortRole + ' · ' : '') + m);
             });
         },
@@ -456,7 +460,7 @@
           }
 
           // Add marker
-          if (!marker.startsWith('(')) {
+          if (marker[marker.length - 1] !== '*') {
             this.data.players.forEach((p) => {
               p.markers = p.markers.filter((m) => m !== marker);
             });
@@ -465,6 +469,9 @@
         },
         removeMarker(player, marker) {
           player.markers = player.markers.filter((m) => m !== marker);
+        },
+        formatMarker(text) {
+          return text.replace(/[\s\*]/g, '');
         },
         shuffleRoles() {
           if (!confirm('Shuffle player roles?')) return;

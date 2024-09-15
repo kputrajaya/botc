@@ -133,7 +133,11 @@
                 </fieldset>
                 <small class="markers">
                   <template x-for="marker in player.markers">
-                    <kbd x-text="marker" @click="removeMarker(player, marker)" title="Remove marker"></kbd>
+                    <kbd
+                      x-text="formatMarker(marker)"
+                      @click="removeMarker(player, marker)"
+                      title="Remove marker"
+                    ></kbd>
                   </template>
                 </small>
               </section>
