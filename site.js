@@ -549,7 +549,6 @@
         init() {
           const connect = (subKey) => {
             const ws = new WebSocket('wss://pubsub.h.kvn.pt/');
-            let interval;
             if (this.isPub) {
               ws.onopen = () => {
                 console.log('Sending data (initial)');
@@ -557,12 +556,8 @@
               };
               this.$watch('data', (value) => {
                 console.log('Sending data');
-                ws.send(JSON.stringify({ action: 'pub', key: subKey, data: this.data }));
+                ws.send(JSON.stringify({ action: 'pub', key: subKey, data: value }));
               });
-              interval = setInterval(() => {
-                console.log('Sending data (interval)');
-                ws.send(JSON.stringify({ action: 'pub', key: subKey, data: this.data }));
-              }, 60000);
             } else {
               ws.onopen = () => {
                 console.log('Subscribing to:', subKey);
@@ -580,7 +575,6 @@
             ws.onclose = (e) => {
               console.log('Socket closed:', e.reason);
               setTimeout(() => connect(subKey), 1000);
-              clearInterval(interval);
             };
           };
 
