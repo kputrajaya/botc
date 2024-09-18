@@ -8,7 +8,7 @@ Using [Pocket Grimoire](https://botc.kvn.ovh), you can play BOTC _without_ physi
 
 This tutorial is **targeted to the ST** who wants to use this app to play BOTC.
 
-![Overview](tutorial-overview.jpg)
+![Overview](tutorial-overview.png)
 
 ## Setting Up
 
@@ -23,45 +23,41 @@ Upon opening the app, you will be prompted the **number of players** and **the e
 
 The app will then generate a list of players numbered 1–N. You must **associate these numbers** to the players. Optionally, you can click on each number to **assign an initial**.
 
-![Initials](tutorial-initials.jpg)
-
 ### Role Selection
 
-The app preselects random roles to **fulfill the required role counts**, without considering modifiers. You can use it as a baseline, and adjust it to your preference. Note that the requirement is also displayed on the bottom:
+The app preselects _random_ roles to **fulfill the required role counts**, without considering modifiers, balance, etc. You can use it as a baseline, and adjust it to your preference. Note that the requirement is also displayed on the bottom:
 
 > **Role counts**: [Townsfolk] - [Outsider] - [Minion] - [Demon]
 
-After selecting the roles, you should click the **"Shuffle"** button on the bottom to shuffle the roles randomly to the players. Then, click the **"Share"** button to secretly and carefully share the roles with the players, in sequence.
+After selecting the roles, you should click the **"Shuffle"** button (once for fairness) on the bottom to shuffle the roles to the players. Then, click the **"Share"** button to secretly share the roles with the players, in sequence.
 
-![Sharer](tutorial-sharer.jpg)
+![Sharer](tutorial-sharer.png)
 
 ### Town Square
 
 If you click the **"Town Square"** button at the top-right corner, a link will be copied to your clipboard. You can **share this link** with the players, so they can access the town square. The town square will display the players' status _in sync_ with the Grimoire, plus some other useful information.
 
-![Town Square](tutorial-townsquare.jpg)
+![Town Square](tutorial-townsquare.png)
 
-Optionally, you can skip it altogether and use physical tokens to display players' status.
+Optionally, you can skip it and use physical tokens to display players' status.
 
 ## Running the Game
 
 ### Status
 
-To change players' status, click the status dropdown (showing _smile_ emoji by default). This will be reflected immediately on the town square.
-
-![Status](tutorial-status.jpg)
+To change players' status, click the status dropdown (showing _moon_ emoji). This will be reflected immediately on the town square.
 
 ### Markers
 
 To add or remove markers, click the marker dropdown (showing _pencil_ emoji). Selecting a non-existing marker will add it, while selecting an existing one will remove it.
 
-Note that role-specific markers (e.g., Monk's "Safe" marker) are considered unique, so marking a player with it will remove the same marker from another player, if any.
+Note that most markers (except "Good" and "Evil") are considered unique, so marking a player with it will remove the same marker from another player, if any.
 
 ### Night Order
 
-Night order for abilities (both first and other nights) can be viewed in an accordion on the bottom.
+Night order for abilities (both first and other nights) can be viewed in an accordion on the bottom. Roles not in game are greyed out, but shown for storytelling purposes.
 
-![Night Order](tutorial-nightorder.jpg)
+![Night Order](tutorial-nightorder.png)
 
 ### Prompts
 
@@ -69,7 +65,7 @@ To replace cardboard prompts during the nights (e.g., "This is the Demon"), clic
 
 Role prompts below can be used to share not-in-play roles to the Demon, information for Washerwoman, etc.
 
-![Prompter](tutorial-prompter.jpg)
+![Prompter](tutorial-prompter.png)
 
 ## Ending the Game
 
