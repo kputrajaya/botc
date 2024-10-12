@@ -18,7 +18,7 @@ Upon opening the app, you will be prompted the **number of players** and **the e
 
 1. [Trouble Brewing](tb.pdf)
 2. [Bad Moon Rising](bmr.pdf)
-3. [Sects & Violet](sv.pdf)
+3. [Sects and Violets](sv.pdf)
 4. [No Greater Joy](ngj.pdf) (5–6 players)
 5. [On Thin Ice](oti.pdf) (5–6 players)
 

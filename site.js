@@ -261,7 +261,7 @@
       },
     },
     sv: {
-      name: 'Sects & Violets',
+      name: 'Sects and Violets',
       roles: {
         townsfolk: [
           'Clockmaker',
