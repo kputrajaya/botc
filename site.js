@@ -292,6 +292,15 @@
         demon: ['Imp'],
       },
     },
+    oti: {
+      name: 'On Thin Ice',
+      roles: {
+        townsfolk: ['Seamstress', 'Philosopher', 'Professor', 'Artist', 'Slayer', 'Virgin'],
+        outsider: ['Klutz', 'Moonchild'],
+        minion: ['Evil Twin', 'Mastermind'],
+        demon: ['Pukka'],
+      },
+    },
   };
 
   const DATA_MODEL = {
@@ -313,7 +322,7 @@
     role: null,
     group: null,
     markers: [],
-    addedMarker: null, // Temporary, reset every time
+    addedMarker: null, // Temporary, resets every time
   };
 
   document.addEventListener('alpine:init', () => {

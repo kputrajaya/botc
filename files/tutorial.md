@@ -2,9 +2,9 @@
 
 # Pocket Grimoire Tutorial
 
-[Blood on the Clocktower](https://bloodontheclocktower.com/) (BOTC) is a game of murder, mystery, deduction, and deception. It's a social game with unique good and evil roles, similar to Werewolf or Mafia. The good team wins if they can execute the demon, while the evil team wins if they can wipe out the village.
+[Blood on the Clocktower](https://bloodontheclocktower.com/) (BOTC) is a game of mystery, deduction, and deception. It's a social game with good and evil roles, similar to Werewolf or Mafia. The good team wins if they can execute the demon, while the evil team wins if they can wipe out the village.
 
-Using [Pocket Grimoire](https://botc.kvn.ovh), you can play BOTC _without_ physical components (having role sheets is still recommended). The Storyteller (ST) will use one device as the Grimoire (dashboard), while the players can utilize another device to display the town square.
+Using [Pocket Grimoire](/), you can play BOTC _without_ physical components (having role sheets is still recommended). The Storyteller (ST) will use one device as the Grimoire (dashboard), while the players can utilize another device to display the town square.
 
 This tutorial is **targeted to the ST** who wants to use this app to play BOTC.
 
@@ -14,12 +14,13 @@ This tutorial is **targeted to the ST** who wants to use this app to play BOTC.
 
 ### Players and Editions
 
-Upon opening the app, you will be prompted the **number of players** and **the edition** of the game. Currently, the app supports 5–15 players (travellers are not supported) and 4 editions:
+Upon opening the app, you will be prompted the **number of players** and **the edition** of the game. Currently, the app supports 5–15 players (travellers are not supported) and 5 editions:
 
-1. [Trouble Brewing](https://botc.kvn.ovh/files/tb.pdf)
-2. [Bad Moon Rising](https://botc.kvn.ovh/files/bmr.pdf)
-3. [Sects & Violet](https://botc.kvn.ovh/files/sv.pdf)
-4. [No Greater Joy](https://botc.kvn.ovh/files/ngj.pdf) (custom [Teensyville](https://wiki.bloodontheclocktower.com/Teensyville) game for 5–6 players)
+1. [Trouble Brewing](tb.pdf)
+2. [Bad Moon Rising](bmr.pdf)
+3. [Sects & Violet](sv.pdf)
+4. [No Greater Joy](ngj.pdf) (5–6 players)
+5. [On Thin Ice](oti.pdf) (5–6 players)
 
 The app will then generate a list of players numbered 1–N. You must **associate these numbers** to the players. Optionally, you can click on each number to **assign an initial**.
 
