@@ -402,14 +402,17 @@
           const chosenRoles = this.chosenRoles;
           return ORDERS.firstNight
             .filter((r) => setRoles.has(r) || r.startsWith('('))
-            .map((r) => ({ name: r, chosen: chosenRoles.has(r) || r.startsWith('(') }));
+            .map((r) => ({ name: r, active: chosenRoles.has(r) || r.startsWith('(') }));
         },
         get otherNightsOrder() {
           const setRoles = this.setRoles;
-          const chosenRoles = this.chosenRoles;
+          const rolesMap = this.data.players.reduce((acc, p) => {
+            acc[p.role] = p;
+            return acc;
+          }, {});
           return ORDERS.otherNights
             .filter((r) => setRoles.has(r))
-            .map((r) => ({ name: r, chosen: chosenRoles.has(r) }));
+            .map((r) => ({ name: r, active: rolesMap[r] && rolesMap[r].status === 'alive' }));
         },
         get availableMarkers() {
           const chosenRoles = this.chosenRoles;

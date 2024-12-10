@@ -152,7 +152,7 @@
           <section>
             <ul>
               <template x-for="role in firstNightOrder">
-                <li :class="{'text-secondary': !role.chosen }" x-text="role.name"></li>
+                <li :class="{'text-secondary': !role.active }" x-text="role.name"></li>
               </template>
             </ul>
           </section>
@@ -162,7 +162,7 @@
           <section class="mb-0">
             <ul class="mb-0">
               <template x-for="role in otherNightsOrder">
-                <li :class="{'text-secondary': !role.chosen }" x-text="role.name"></li>
+                <li :class="{'text-secondary': !role.active }" x-text="role.name"></li>
               </template>
             </ul>
           </section>
