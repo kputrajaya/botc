@@ -112,11 +112,15 @@ details summary {
 .town-square .player > .number {
   width: 4em;
 }
-.player > .number.townsfolk,
-.player > .number.outsider {
+.player > .number.townsfolk {
   background: #0172AD;
 }
-.player > .number.minion,
+.player > .number.outsider {
+  background: #9062CA;
+}
+.player > .number.minion {
+  background: #977000;
+}
 .player > .number.demon {
   background: #BD3C13;
 }
