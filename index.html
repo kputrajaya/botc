@@ -239,7 +239,9 @@
             <div class="col-xs-4 col-sm-3 col-md-2 mb-2">
               <button @click="promptText('Did you\nvote today?')">Vote?</button>
             </div>
-            <div class="col-xs-4 col-sm-3 col-md-2 mb-2"><button @click="promptCustom()">(Custom)</button></div>
+            <div class="col-xs-4 col-sm-3 col-md-2 mb-2">
+              <button class="secondary" @click="promptCustom()">(Custom)</button>
+            </div>
           </div>
         </article>
 
@@ -248,7 +250,9 @@
             <div class="row">
               <template x-for="role in group">
                 <div class="col-xs-4 col-sm-3 col-md-2 mb-2">
-                  <button @click="promptText(role.replace(/\s/g, '\n'))"><div x-text="role"></div></button>
+                  <button :class="{secondary: !chosenRoles.has(role)}" @click="promptText(role.replace(/\s/g, '\n'))">
+                    <div x-text="role"></div>
+                  </button>
                 </div>
               </template>
             </div>
