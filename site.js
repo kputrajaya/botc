@@ -434,7 +434,12 @@
           if (initial === null) return;
 
           initial = initial.trim().toUpperCase();
-          if (!initial || /^[A-Z]$/.test(initial)) {
+          const isAlphabet = /^[A-Z]+$/.test(initial);
+          if (isAlphabet && initial.length === this.data.players.length) {
+            this.data.players.forEach((p, i) => {
+              p.initial = initial[i];
+            });
+          } else if ((isAlphabet && initial.length === 1) || !initial) {
             player.initial = initial;
           } else {
             notyf.error('Invalid initial!');
