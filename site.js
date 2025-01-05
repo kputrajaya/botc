@@ -310,30 +310,29 @@
       },
     },
   };
+  const DATA_JSON = JSON.stringify({
+    set: null,
+    players: [],
+    sharer: {
+      active: false,
+      show: false,
+      index: 0,
+    },
+    prompter: {
+      active: false,
+      message: null,
+    },
+  });
+  const PLAYER_JSON = JSON.stringify({
+    initial: '',
+    status: 'alive', // alive, dead_vote, dead_no_vote
+    role: null,
+    group: null,
+    markers: [],
+    addedMarker: null, // Temporary, resets every time
+  });
 
   document.addEventListener('alpine:init', () => {
-    const DATA_MODEL = {
-      set: null,
-      players: [],
-      sharer: {
-        active: false,
-        show: false,
-        index: 0,
-      },
-      prompter: {
-        active: false,
-        message: null,
-      },
-    };
-    const PLAYER_MODEL = {
-      initial: '',
-      status: 'alive', // alive, dead_vote, dead_no_vote
-      role: null,
-      group: null,
-      markers: [],
-      addedMarker: null, // Temporary, resets every time
-    };
-
     const notyf = new Notyf({
       ripple: false,
       position: { x: 'center' },
@@ -377,7 +376,7 @@
 
     Alpine.data('botc', function () {
       return {
-        data: this.$persist(JSON.parse(JSON.stringify(DATA_MODEL))),
+        data: this.$persist(JSON.parse(DATA_JSON)),
         subKey: this.$persist(null),
         isPub: true, // Whether the page is a publisher (Grimoire) or subscriber (Town Square)
 
@@ -566,7 +565,7 @@
           const response = prompt('Reset game? Type "y" to continue.') || '';
           if (response.trim().toLowerCase() !== 'y') return;
 
-          this.data = JSON.parse(JSON.stringify(DATA_MODEL));
+          this.data = JSON.parse(DATA_JSON);
           window.location.reload();
         },
 
@@ -621,9 +620,8 @@
               playerCount = Math.floor(prompt(promptText));
             }
             this.data.players = [];
-            const playerModelJson = JSON.stringify(PLAYER_MODEL);
             for (let i = 0; i < playerCount; i++) {
-              this.data.players.push(JSON.parse(playerModelJson));
+              this.data.players.push(JSON.parse(PLAYER_JSON));
             }
 
             // Ask for edition
