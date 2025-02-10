@@ -8,7 +8,7 @@ a {
 }
 
 h1 {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
 }
 
 small {
@@ -52,16 +52,16 @@ details summary {
 }
 
 .fs-4 {
-  font-size: 1.265rem !important;
+  font-size: 1.5625rem !important;
 }
 
 .text-danger {
-  color: #BD3C13;
-  text-decoration-color: #BD3C13;
+  color: #C52F21; /* Red 550 */
+  text-decoration-color: #C52F21;
 }
 .text-secondary {
-  color: #515865;
-  text-decoration-color: #515865;
+  color: #4D535E; /* Zinc 650 */
+  text-decoration-color: #4D535E;
 }
 
 .text-center {
@@ -103,7 +103,7 @@ details summary {
 .player > .number {
   width: 2.4em;
   padding: 0 !important;
-  background: #646B79;
+  background: #4D535E; /* Zinc 650 */
   border: 0;
   opacity: 1;
   white-space: nowrap;
@@ -113,19 +113,18 @@ details summary {
   width: 4em;
 }
 .player > .number.townsfolk {
-  background: #0172AD;
+  background: #0172AD; /* Azure 550 */
 }
 .player > .number.outsider {
-  background: #9062CA;
+  background: #007A50; /* Jade 550 */
 }
 .player > .number.minion {
-  background: #977000;
+  background: #7A4400; /* Pumpkin 650 */
 }
 .player > .number.demon {
-  background: #BD3C13;
+  background: #9B2318; /* Red 650 */
 }
-.player > .status,
-.player > .add-marker {
+.player > .status {
   width: 3em;
   text-align: center;
 }
@@ -135,6 +134,14 @@ details summary {
   overflow: hidden;
   flex: 1 1 auto !important;
 }
+.player > .add-marker {
+  width: 3em;
+  text-align: center;
+  text-align-last: center;
+}
+.player > .add-marker option {
+  text-align: left;
+}
 
 .markers {
   margin-top: calc(var(--pico-spacing) * -1);
@@ -143,7 +150,7 @@ details summary {
 .markers > kbd {
   margin: calc(var(--pico-spacing) * 0.5) calc(var(--pico-spacing) * 0.5) 0 0;
   padding: calc(var(--pico-spacing) * 0.2) calc(var(--pico-spacing) * 0.3);
-  font-size: 0.6rem;
+  font-size: 0.64rem;
   font-weight: 400;
   cursor: pointer;
   transform: scaleY(1.06);

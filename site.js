@@ -429,7 +429,7 @@
               let shortRole = r
                 .replace(/[^A-Za-z]/g, ' ')
                 .split(' ')[0]
-                .substring(0, 5)
+                .substring(0, 4)
                 .toUpperCase();
               return BOTC.markers[r].map((m) => (r ? shortRole + ' · ' : '') + m);
             });
