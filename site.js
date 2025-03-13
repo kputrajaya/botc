@@ -337,19 +337,14 @@
       ripple: false,
       position: { x: 'center' },
     });
-    const getParams = () => {
-      const params = {};
-      const search = window.location.search;
-      if (search) {
-        search
-          .substring(1)
-          .split('&')
-          .forEach((param) => {
-            const [key, value] = param.split('=');
-            params[key] = decodeURIComponent(value).replace(/\+/g, ' ').replace(/\|/g, '\n');
-          });
+    const getParam = (name) => {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        return params.get(name);
+      } catch (err) {
+        console.error('Error parsing params:', err);
+        return null;
       }
-      return params;
     };
     const copyText = async (text) => {
       // Copy using execCommand
@@ -377,8 +372,8 @@
     Alpine.data('botc', function () {
       return {
         data: this.$persist(JSON.parse(DATA_JSON)),
-        subKey: this.$persist(null),
-        isPub: true, // Whether the page is a publisher (Grimoire) or subscriber (Town Square)
+        isPub: true, // Whether the page is a Grimoire (true) or a Town Square (false)
+        offline: true, // Whether the page should operate offline and not sync
 
         // Computed
         get set() {
@@ -557,8 +552,11 @@
         promptClear() {
           this.data.prompter.message = null;
         },
+        squareLink() {
+          return `${window.location.href}&r=display`;
+        },
         copySquareLink() {
-          copyText(`${window.location.href}?k=${this.subKey}`);
+          copyText(this.squareLink());
           notyf.success('Link copied!');
         },
         reset() {
@@ -571,91 +569,60 @@
 
         // Initialization
         init() {
-          const connect = (subKey) => {
-            const ws = new WebSocket('wss://pubsub.h.kvn.pt/');
-            if (this.isPub) {
-              ws.onopen = () => {
-                console.log('Sending data (initial)');
-                ws.send(JSON.stringify({ action: 'pub', key: subKey, data: this.data }));
-              };
-              this.$watch('data', (value) => {
-                console.log('Sending data');
-                ws.send(JSON.stringify({ action: 'pub', key: subKey, data: value }));
-              });
-            } else {
-              ws.onopen = () => {
-                console.log('Subscribing to:', subKey);
-                ws.send(JSON.stringify({ action: 'sub', key: subKey }));
-              };
-              ws.onmessage = (event) => {
-                console.log('Received data');
-                this.data = JSON.parse(event.data);
-              };
-            }
-            ws.onerror = function (err) {
-              console.error('Socket error:', err.message);
-              ws.close();
-            };
-            ws.onclose = (e) => {
-              console.log('Socket closed:', e.reason);
-              setTimeout(() => connect(subKey), 1000);
-            };
-          };
+          const ps = new PubSub({
+            host: 'pubsub.h.kvn.pt',
+            appKey: 'botc',
+            getData: () => this.data,
+            setData: (data) => (this.data = data),
+          });
+          this.$watch('data', ps.pub);
 
-          // Connect as subscriber if Town Square
-          const params = getParams();
-          if (params.k) {
-            this.isPub = false;
-            connect('botc:' + params.k);
-            return;
+          // Parse URL params
+          this.offline = !getParam('k');
+          this.isPub = this.offline || getParam('r') !== 'display';
+          if (!this.isPub || (this.data.players.length && this.data.set)) return;
+
+          // Ask for player count
+          const minPlayer = 5;
+          const maxPlayer = 15;
+          let promptText = `How many players? (${minPlayer}-${maxPlayer})`;
+          let playerCount;
+          while (!(playerCount >= minPlayer && playerCount <= maxPlayer)) {
+            playerCount = Math.floor(prompt(promptText));
+          }
+          this.data.players = [];
+          for (let i = 0; i < playerCount; i++) {
+            this.data.players.push(JSON.parse(PLAYER_JSON));
           }
 
-          if (!this.data.players.length || !this.data.set) {
-            // Ask for player count
-            const minPlayer = 5;
-            const maxPlayer = 15;
-            let promptText = `How many players? (${minPlayer}-${maxPlayer})`;
-            let playerCount;
-            while (!(playerCount >= minPlayer && playerCount <= maxPlayer)) {
-              playerCount = Math.floor(prompt(promptText));
-            }
-            this.data.players = [];
-            for (let i = 0; i < playerCount; i++) {
-              this.data.players.push(JSON.parse(PLAYER_JSON));
-            }
+          // Ask for edition
+          const keys = Object.keys(BOTC.sets);
+          const options = keys.map((k, i) => `${i + 1}. ${BOTC.sets[k].name}`);
+          promptText = `Which edition? (1-${keys.length})\n${options.join('\n')}`;
+          let edition;
+          while (!(edition >= 1 && edition <= keys.length)) {
+            edition = Math.floor(prompt(promptText));
+          }
+          this.data.set = keys[edition - 1];
 
-            // Ask for edition
-            const keys = Object.keys(BOTC.sets);
-            const options = keys.map((k, i) => `${i + 1}. ${BOTC.sets[k].name}`);
-            promptText = `Which edition? (1-${keys.length})\n${options.join('\n')}`;
-            let edition;
-            while (!(edition >= 1 && edition <= keys.length)) {
-              edition = Math.floor(prompt(promptText));
-            }
-            this.data.set = keys[edition - 1];
-
-            // Randomize roles
-            const roleGroups = Object.values(this.set.roles);
-            const roleCounts = BOTC.roleCounts[this.data.players.length];
-            let lastPlayerIndex = 0;
-            roleCounts.forEach((roleCount, i) => {
-              const selectedRoles = roleGroups[i]
-                .map((role, index) => ({ role, index }))
-                .sort(() => Math.random() - 0.5)
-                .slice(0, roleCount)
-                .sort((a, b) => a.index - b.index)
-                .map((item) => item.role);
-              selectedRoles.forEach((r, j) => {
-                const player = this.data.players[lastPlayerIndex + j];
-                player.role = r;
-                this.changeRole(player);
-              });
-              lastPlayerIndex += roleCount;
+          // Randomize roles
+          const roleGroups = Object.values(this.set.roles);
+          const roleCounts = BOTC.roleCounts[this.data.players.length];
+          let lastPlayerIndex = 0;
+          roleCounts.forEach((roleCount, i) => {
+            const selectedRoles = roleGroups[i]
+              .map((role, index) => ({ role, index }))
+              .sort(() => Math.random() - 0.5)
+              .slice(0, roleCount)
+              .sort((a, b) => a.index - b.index)
+              .map((item) => item.role);
+            selectedRoles.forEach((r, j) => {
+              const player = this.data.players[lastPlayerIndex + j];
+              player.role = r;
+              this.changeRole(player);
             });
-          }
-
-          this.subKey = this.subKey || Math.random().toString(36).substring(2);
-          connect('botc:' + this.subKey);
+            lastPlayerIndex += roleCount;
+          });
         },
       };
     });
