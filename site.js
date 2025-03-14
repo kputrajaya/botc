@@ -373,7 +373,7 @@
       return {
         data: this.$persist(JSON.parse(DATA_JSON)),
         isGrimoire: true, // Whether the page is a Grimoire or a Town Square
-        isOffline: true, // Whether the page is operating in offline mode
+        isOnline: false, // Whether the page is operating in online (synced) mode
 
         // Computed
         get set() {
@@ -569,10 +569,6 @@
 
         // Initialization
         init() {
-          this.isOffline = !getParam('k');
-          this.isGrimoire = this.isOffline || getParam('r') !== 'display';
-
-          // Initiate PubSub
           const ps = new PubSub({
             host: 'pubsub.h.kvn.pt',
             appKey: 'botc',
@@ -581,6 +577,9 @@
           });
           this.$watch('data', ps.pub);
 
+          // Page state and purpose
+          this.isOnline = ps.active;
+          this.isGrimoire = !this.isOnline || getParam('r') !== 'display';
           if (!this.isGrimoire || (this.data.players.length && this.data.set)) return;
 
           // Ask for player count
