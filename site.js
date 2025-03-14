@@ -570,7 +570,7 @@
         // Initialization
         init() {
           const ps = new PubSub({
-            host: 'pubsub.h.kvn.pt',
+            host: 'wss://pubsub.h.kvn.pt',
             appKey: 'botc',
             getData: () => this.data,
             setData: (data) => (this.data = data),
