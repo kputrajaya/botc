@@ -372,8 +372,8 @@
     Alpine.data('botc', function () {
       return {
         data: this.$persist(JSON.parse(DATA_JSON)),
-        isPub: true, // Whether the page is a Grimoire (true) or a Town Square (false)
-        offline: true, // Whether the page should operate offline and not sync
+        isGrimoire: true, // Whether the page is a Grimoire or a Town Square
+        isOffline: true, // Whether the page is operating in offline mode
 
         // Computed
         get set() {
@@ -569,6 +569,10 @@
 
         // Initialization
         init() {
+          this.isOffline = !getParam('k');
+          this.isGrimoire = this.isOffline || getParam('r') !== 'display';
+
+          // Initiate PubSub
           const ps = new PubSub({
             host: 'pubsub.h.kvn.pt',
             appKey: 'botc',
@@ -577,10 +581,7 @@
           });
           this.$watch('data', ps.pub);
 
-          // Parse URL params
-          this.offline = !getParam('k');
-          this.isPub = this.offline || getParam('r') !== 'display';
-          if (!this.isPub || (this.data.players.length && this.data.set)) return;
+          if (!this.isGrimoire || (this.data.players.length && this.data.set)) return;
 
           // Ask for player count
           const minPlayer = 5;

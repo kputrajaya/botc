@@ -24,7 +24,7 @@
 
   <body x-data="botc" x-cloak>
     <!-- Town Square -->
-    <main class="container" x-show="!isPub">
+    <main class="container" x-show="!isGrimoire">
       <h1>Town Square</h1>
       <div class="town-square">
         <template
@@ -67,12 +67,12 @@
     </main>
 
     <!-- Grimoire -->
-    <main class="container" x-show="isPub">
+    <main class="container" x-show="isGrimoire">
       <div>
         <a class="c-help" href="files/tutorial.html" target="_blank">
           <h1 class="d-inline-block">Grimoire</h1>
         </a>
-        <a :href="squareLink()" class="float-end" @click.prevent="copySquareLink()" x-show="!offline">
+        <a :href="squareLink()" class="float-end" @click.prevent="copySquareLink()" x-show="!isOffline">
           <small>Town Square</small>
         </a>
       </div>
