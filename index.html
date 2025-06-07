@@ -33,7 +33,11 @@
           <div>
             <template x-for="(player, index) in group">
               <fieldset class="player" role="group">
-                <button class="number" x-text="index + groupIndex * playerMidIndex + 1" disabled></button>
+                <button
+                  class="number"
+                  x-text="(player.initial || '') + (index + groupIndex * playerMidIndex + 1)"
+                  disabled
+                ></button>
                 <input
                   class="fs-4 text-center"
                   :value="
