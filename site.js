@@ -372,10 +372,16 @@
     Alpine.data('botc', function () {
       return {
         data: this.$persist(JSON.parse(DATA_JSON)),
-        isGrimoire: true, // Whether the page is a Grimoire or a Town Square
-        isOnline: false, // Whether the page is operating in online (synced) mode
+        isGrimoire: true,
+        isOnline: false,
+        showSetupModal: false,
+        playerCountInput: 7,
+        setInput: 'tb',
 
         // Computed
+        get sets() {
+          return Object.fromEntries(Object.keys(BOTC.sets).map((key) => [key, BOTC.sets[key].name]));
+        },
         get set() {
           return BOTC.sets[this.data.set || Object.keys(BOTC.sets)[0]];
         },
@@ -434,6 +440,42 @@
         },
 
         // Method
+        submitSetup() {
+          const playerCount = this.playerCountInput;
+          const set = this.setInput;
+          if (!playerCount || !set) {
+            alert('Fields cannot be empty!');
+            return;
+          }
+
+          // Update data
+          this.data.players = [];
+          for (let i = 0; i < playerCount; i++) {
+            this.data.players.push(JSON.parse(PLAYER_JSON));
+          }
+          this.data.set = set;
+
+          // Randomize roles
+          const roleGroups = Object.values(this.set.roles);
+          const roleCounts = BOTC.roleCounts[this.data.players.length];
+          let lastPlayerIndex = 0;
+          roleCounts.forEach((roleCount, i) => {
+            const selectedRoles = roleGroups[i]
+              .map((role, index) => ({ role, index }))
+              .sort(() => Math.random() - 0.5)
+              .slice(0, roleCount)
+              .sort((a, b) => a.index - b.index)
+              .map((item) => item.role);
+            selectedRoles.forEach((r, j) => {
+              const player = this.data.players[lastPlayerIndex + j];
+              player.role = r;
+              this.changeRole(player);
+            });
+            lastPlayerIndex += roleCount;
+          });
+
+          this.showSetupModal = false;
+        },
         setInitial(player) {
           let initial = prompt('Set an initial to be displayed [A-Z]?', player.initial || '');
           if (initial === null) return;
@@ -555,8 +597,10 @@
         squareLink() {
           return `${window.location.href}&r=display`;
         },
-        copySquareLink() {
-          copyText(this.squareLink());
+        copyLink(e) {
+          const link = e.currentTarget.href;
+          if (!link) return;
+          copyText(link);
           notyf.success('Link copied!');
         },
         reset() {
@@ -582,47 +626,7 @@
           this.isGrimoire = !this.isOnline || getParam('r') !== 'display';
           if (!this.isGrimoire || (this.data.players.length && this.data.set)) return;
 
-          // Ask for player count
-          const minPlayer = 5;
-          const maxPlayer = 15;
-          let promptText = `How many players? (${minPlayer}-${maxPlayer})`;
-          let playerCount;
-          while (!(playerCount >= minPlayer && playerCount <= maxPlayer)) {
-            playerCount = Math.floor(prompt(promptText));
-          }
-          this.data.players = [];
-          for (let i = 0; i < playerCount; i++) {
-            this.data.players.push(JSON.parse(PLAYER_JSON));
-          }
-
-          // Ask for edition
-          const keys = Object.keys(BOTC.sets);
-          const options = keys.map((k, i) => `${i + 1}. ${BOTC.sets[k].name}`);
-          promptText = `Which edition? (1-${keys.length})\n${options.join('\n')}`;
-          let edition;
-          while (!(edition >= 1 && edition <= keys.length)) {
-            edition = Math.floor(prompt(promptText));
-          }
-          this.data.set = keys[edition - 1];
-
-          // Randomize roles
-          const roleGroups = Object.values(this.set.roles);
-          const roleCounts = BOTC.roleCounts[this.data.players.length];
-          let lastPlayerIndex = 0;
-          roleCounts.forEach((roleCount, i) => {
-            const selectedRoles = roleGroups[i]
-              .map((role, index) => ({ role, index }))
-              .sort(() => Math.random() - 0.5)
-              .slice(0, roleCount)
-              .sort((a, b) => a.index - b.index)
-              .map((item) => item.role);
-            selectedRoles.forEach((r, j) => {
-              const player = this.data.players[lastPlayerIndex + j];
-              player.role = r;
-              this.changeRole(player);
-            });
-            lastPlayerIndex += roleCount;
-          });
+          this.showSetupModal = true;
         },
       };
     });

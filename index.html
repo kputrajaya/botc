@@ -76,9 +76,11 @@
         <a class="c-help" href="files/tutorial.html" target="_blank">
           <h1 class="d-inline-block">Grimoire</h1>
         </a>
-        <a :href="squareLink()" class="float-end" @click.prevent="copySquareLink()" x-show="isOnline">
-          <small>Town Square</small>
-        </a>
+        <span class="float-end">
+          <a :href="`files/${data.set}.pdf`" @click.prevent="copyLink($event)">Sheet</a>
+          <span x-show="isOnline">·</span>
+          <a :href="squareLink()" @click.prevent="copyLink($event)" x-show="isOnline">Square</a>
+        </span>
       </div>
       <div class="grimoire">
         <template
@@ -273,5 +275,30 @@
       x-text="data.prompter.message"
       @click="promptClear()"
     ></div>
+
+    <dialog open x-show="showSetupModal">
+      <article>
+        <header>
+          <p>
+            <strong>Blood on the Clocktower</strong>
+          </p>
+        </header>
+        <p>How many players?</p>
+        <select x-model="playerCountInput">
+          <template x-for="num in Array.from({length: 11}, (_, i) => i + 5)">
+            <option :value="num" x-text="num" :selected="num == playerCountInput"></option>
+          </template>
+        </select>
+        <p>Which edition?</p>
+        <select x-model="setInput">
+          <template x-for="(name, key) in sets" :key="key">
+            <option :value="key" x-text="name" :selected="key == setInput"></option>
+          </template>
+        </select>
+        <footer>
+          <button @click="submitSetup()">Confirm</button>
+        </footer>
+      </article>
+    </dialog>
   </body>
 </html>

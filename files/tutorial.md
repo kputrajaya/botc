@@ -1,4 +1,4 @@
-<!-- ghmd tutorial.md --embed-css --dark -->
+<!-- $ [root]/files> ghmd tutorial.md --embed-css --dark -->
 
 # Pocket Grimoire Tutorial
 
@@ -8,7 +8,7 @@ Using [Pocket Grimoire](/), you can play BOTC _without_ physical components (hav
 
 This tutorial is **targeted to the ST** who wants to use this app to play BOTC.
 
-![Overview](tutorial-overview.png)
+<img src="tutorial_grimoire.png" alt="Overview" width="400">
 
 ## Setting Up
 
@@ -32,13 +32,11 @@ The app preselects _random_ roles to **fulfill the required role counts**, witho
 
 After selecting the roles, you should click the **"Shuffle"** button (once for fairness) on the bottom to shuffle the roles to the players. Then, click the **"Share"** button to secretly share the roles with the players, in sequence.
 
-![Sharer](tutorial-sharer.png)
-
 ### Town Square
 
 If you click the **"Town Square"** button at the top-right corner, a link will be copied to your clipboard. You can **share this link** with the players, so they can access the town square. The town square will display the players' status _in sync_ with the Grimoire, plus some other useful information.
 
-![Town Square](tutorial-townsquare.png)
+<img src="tutorial_square.png" alt="Town Square" width="400">
 
 Optionally, you can skip it and use physical tokens to display players' status.
 
@@ -58,15 +56,13 @@ Note that most markers (except "Good" and "Evil") are considered unique, so mark
 
 Night order for abilities (both first and other nights) can be viewed in an accordion on the bottom. Roles not in game are greyed out, but shown for storytelling purposes.
 
-![Night Order](tutorial-nightorder.png)
+<img src="tutorial_order.png" alt="Night Order" width="400">
 
 ### Prompts
 
-To replace cardboard prompts during the nights (e.g., "This is the Demon"), click the **"Prompt"** button on the bottom. You will be presented with a list of available prompts, as well as an option to create a custom one.
+To prompt players during the nights (e.g., "This is the Demon"), click the **"Prompt"** button on the bottom. You will be presented with a list of available prompts, as well as an option to create a custom one.
 
-Role prompts below can be used to share not-in-play roles to the Demon, information for Washerwoman, etc.
-
-![Prompter](tutorial-prompter.png)
+The role prompts can be used to share not-in-play roles to the Demon, information for Washerwoman, etc.
 
 ## Ending the Game
 
