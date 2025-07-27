@@ -35,6 +35,12 @@ details summary {
   width: 100%;
 }
 
+.mt-0 {
+  margin-top: 0;
+}
+.mt-1 {
+  margin-top: calc(var(--pico-block-spacing-vertical) / 2);
+}
 .mt-2 {
   margin-top: var(--pico-block-spacing-vertical);
 }
@@ -47,8 +53,23 @@ details summary {
 .mb-2 {
   margin-bottom: var(--pico-block-spacing-vertical);
 }
+.pt-0 {
+  padding-top: 0;
+}
+.pt-1 {
+  padding-top: calc(var(--pico-block-spacing-vertical) / 2);
+}
 .pt-2 {
   padding-top: var(--pico-block-spacing-vertical);
+}
+.pb-0 {
+  padding-bottom: 0;
+}
+.pb-1 {
+  padding-bottom: calc(var(--pico-block-spacing-vertical) / 2);
+}
+.pb-2 {
+  padding-bottom: var(--pico-block-spacing-vertical);
 }
 
 .fs-4 {

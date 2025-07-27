@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>Pocket Town Square</title>
+
+    <link rel="icon" href="favicon-16.png" sizes="16x16" />
+    <link rel="icon" href="favicon-32.png" sizes="32x32" />
+    <link rel="icon" href="favicon-96.png" sizes="96x96" />
+
+    <link href="https://cdn.jsdelivr.net/npm/flexboxgrid@6.3.1/dist/flexboxgrid.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" rel="stylesheet" />
+    <link href="site.css" rel="stylesheet" />
+
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://kputrajaya.github.io/pubsub/sdk.js" defer></script>
+    <script src="site.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  </head>
+
+  <body x-data="botc" x-cloak>
+    <main class="container">
+      <h1>Town Square</h1>
+      <div class="town-square">
+        <template
+          x-for="(group, groupIndex) in [data.players.slice(0, playerMidIndex), data.players.slice(playerMidIndex)]"
+        >
+          <div>
+            <template x-for="(player, index) in group">
+              <fieldset class="player" role="group">
+                <button
+                  class="number"
+                  x-text="(player.initial || '') + (index + groupIndex * playerMidIndex + 1)"
+                  disabled
+                ></button>
+                <input
+                  class="fs-4 text-center"
+                  :value="
+                  player.status == 'alive' ?
+                  '&#127765;' :
+                  player.status == 'dead_vote' ?
+                  '&#127762;' :
+                  '&#127761;'"
+                  readonly
+                />
+              </fieldset>
+            </template>
+          </div>
+        </template>
+      </div>
+      <article>
+        <section>
+          <strong>Required votes</strong>: <span x-text="requiredVoteCount"></span> /
+          <span x-text="alivePlayerCount"></span>
+        </section>
+        <section><strong>Role counts</strong>: <span x-text="roleCounts"></span></section>
+        <section class="mb-0">
+          <div><strong>Legend</strong>:</div>
+          <ul class="mb-0">
+            <li>&#127765;: Alive</li>
+            <li>&#127762;: Dead With Vote</li>
+            <li>&#127761;: Dead With No Vote</li>
+          </ul>
+        </section>
+      </article>
+    </main>
+</html>

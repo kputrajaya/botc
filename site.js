@@ -372,7 +372,6 @@
     Alpine.data('botc', function () {
       return {
         data: this.$persist(JSON.parse(DATA_JSON)),
-        isGrimoire: true,
         isOnline: false,
         showSetupModal: false,
         playerCountInput: 7,
@@ -595,7 +594,7 @@
           this.data.prompter.message = null;
         },
         squareLink() {
-          return `${window.location.href}&r=display`;
+          return `square.html${window.location.search}`;
         },
         copyLink(e) {
           const link = e.currentTarget.href;
@@ -623,10 +622,7 @@
 
           // Page state and purpose
           this.isOnline = ps.active;
-          this.isGrimoire = !this.isOnline || getParam('r') !== 'display';
-          if (!this.isGrimoire || (this.data.players.length && this.data.set)) return;
-
-          this.showSetupModal = true;
+          this.showSetupModal = !this.data.players.length || !this.data.set;
         },
       };
     });
