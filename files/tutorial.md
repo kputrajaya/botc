@@ -34,7 +34,7 @@ After selecting the roles, you should click the **"Shuffle"** button (once for f
 
 ### Town Square
 
-If you click the **"Town Square"** button at the top-right corner, a link will be copied to your clipboard. You can **share this link** with the players, so they can access the town square. The town square will display the players' status _in sync_ with the Grimoire, plus some other useful information.
+If you click the **"Square"** button at the top-right corner, a link will be copied to your clipboard. You can **share this link** with the players, so they can access the town square. The town square will display the players' status _in sync_ with the Grimoire, plus some other useful information.
 
 <img src="tutorial_square.png" alt="Town Square" width="400">
 
