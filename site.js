@@ -389,7 +389,7 @@
           return new Set(
             Object.keys(roles)
               .map((g) => roles[g])
-              .flat()
+              .flat(),
           );
         },
         get chosenRoles() {
@@ -420,7 +420,7 @@
               let shortRole = r
                 .replace(/[^A-Za-z]/g, ' ')
                 .split(' ')[0]
-                .substring(0, 4)
+                .substring(0, 5)
                 .toUpperCase();
               return BOTC.markers[r].map((m) => (r ? shortRole + ' · ' : '') + m);
             });
@@ -511,7 +511,7 @@
           }
 
           // Add marker
-          if (marker[marker.length - 1] !== '*') {
+          if (!marker.endsWith('*')) {
             this.data.players.forEach((p) => {
               p.markers = p.markers.filter((m) => m !== marker);
             });

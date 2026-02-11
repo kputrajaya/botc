@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -48,14 +48,10 @@
                     @click="setInitial(player)"
                   ></button>
                   <select class="status" x-model="player.status">
-                    <optgroup label="Alive">
-                      <option value="alive">&#127765;</option>
-                    </optgroup>
-                    <optgroup label="Dead With Vote">
-                      <option value="dead_vote">&#127762;</option>
-                    </optgroup>
-                    <optgroup label="Dead With No Vote">
-                      <option value="dead_no_vote">&#127761;</option>
+                    <optgroup label="Status">
+                      <option value="alive">&#127765; Alive</option>
+                      <option value="dead_vote">&#127762; Dead With Vote</option>
+                      <option value="dead_no_vote">&#127761; Dead With No Vote</option>
                     </optgroup>
                   </select>
                   <select class="choose-role" x-model="player.role" @change="changeRole(player)">
@@ -81,10 +77,12 @@
                     </optgroup>
                   </select>
                   <select class="add-marker" x-model="player.addedMarker" @change="addMarker(player)">
-                    <option value="">&#9999;&#65039;</option>
-                    <template x-for="marker in availableMarkers">
-                      <option :value="marker" x-text="marker"></option>
-                    </template>
+                    <optgroup label="Markers">
+                      <option value="">&#9999;&#65039;</option>
+                      <template x-for="marker in availableMarkers">
+                        <option :value="marker" x-text="marker"></option>
+                      </template>
+                    </optgroup>
                   </select>
                 </fieldset>
                 <small class="markers">
