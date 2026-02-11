@@ -58,9 +58,9 @@ Night order for abilities (both first and other nights) can be viewed in an acco
 
 <img src="tutorial_order.png" alt="Night Order" width="400">
 
-### Prompts
+### Prompter
 
-To prompt players during the nights (e.g., "This is the Demon"), click the **"Prompt"** button on the bottom. You will be presented with a list of available prompts, as well as an option to create a custom one.
+To prompt players during the nights (e.g., "This is the Demon"), click the **"Prompter"** button on the bottom. You will be presented with a list of available prompts, as well as an option to create a custom one.
 
 The role prompts can be used to share not-in-play roles to the Demon, information for Washerwoman, etc.
 

@@ -337,15 +337,6 @@
       ripple: false,
       position: { x: 'center' },
     });
-    const getParam = (name) => {
-      try {
-        const params = new URLSearchParams(window.location.search);
-        return params.get(name);
-      } catch (err) {
-        console.error('Error parsing params:', err);
-        return null;
-      }
-    };
     const copyText = async (text) => {
       // Copy using execCommand
       const el = document.createElement('textarea');
@@ -534,7 +525,7 @@
           return text.replace(/[\s\*]/g, '');
         },
         shuffleRoles() {
-          if (!confirm('Shuffle player roles?')) return;
+          if (!confirm('Shuffle player roles and markers?')) return;
 
           const players = this.data.players;
 
@@ -545,6 +536,7 @@
             ran = Math.floor(Math.random() * cur);
             cur--;
             [players[cur].role, players[ran].role] = [players[ran].role, players[cur].role];
+            [players[cur].markers, players[ran].markers] = [players[ran].markers, players[cur].markers];
           }
 
           // Refresh groups and markers
