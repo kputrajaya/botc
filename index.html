@@ -24,10 +24,10 @@
   <body x-data="botc" x-cloak>
     <main class="container">
       <div>
-        <a class="c-help" href="files/tutorial.html" target="_blank">
-          <h1 class="d-inline-block">Grimoire</h1>
+        <a class="cursor-help" href="files/tutorial.html" target="_blank">
+          <h1 class="inline-block">Grimoire</h1>
         </a>
-        <span class="float-end">
+        <span class="float-right">
           <a :href="`files/${data.set}.pdf`" @click.prevent="copyLink($event)">Sheet</a>
           <span x-show="isOnline">·</span>
           <a :href="squareLink()" @click.prevent="copyLink($event)" x-show="isOnline">Square</a>
@@ -110,7 +110,7 @@
           <section>
             <ul>
               <template x-for="role in firstNightOrder">
-                <li :class="{'text-secondary': !role.active }" x-text="role.name"></li>
+                <li :class="{'text-secondary line-through': !role.active }" x-text="role.name"></li>
               </template>
             </ul>
           </section>
@@ -120,7 +120,7 @@
           <section class="mb-0">
             <ul class="mb-0">
               <template x-for="role in otherNightsOrder">
-                <li :class="{'text-secondary': !role.active }" x-text="role.name"></li>
+                <li :class="{'text-secondary line-through': !role.active }" x-text="role.name"></li>
               </template>
             </ul>
           </section>
@@ -168,8 +168,8 @@
     <div class="prompter" x-show="data.prompter.active">
       <div class="container pt-2">
         <div>
-          <h5 class="d-inline-block">Prompter</h5>
-          <a class="float-end" @click="togglePrompter()"><small>Close</small></a>
+          <h5 class="inline-block">Prompter</h5>
+          <a class="float-right" @click="togglePrompter()"><small>Close</small></a>
         </div>
         <article>
           <div class="row">

@@ -76,7 +76,7 @@ details summary {
   padding-bottom: var(--pico-block-spacing-vertical);
 }
 
-.fs-4 {
+.text-xl {
   font-size: 1.5625rem !important;
 }
 
@@ -93,15 +93,19 @@ details summary {
   text-align: center;
 }
 
-.d-inline-block {
+.line-through {
+  text-decoration: line-through;
+}
+
+.inline-block {
   display: inline-block;
 }
 
-.float-end {
+.float-right {
   float: right;
 }
 
-.c-help {
+.cursor-help {
   cursor: help;
 }
 
