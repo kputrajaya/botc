@@ -221,6 +221,7 @@ details summary {
   justify-content: center;
   z-index: 3;
   cursor: pointer;
+  user-select: none;
 }
 
 .town-square article {
