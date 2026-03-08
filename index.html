@@ -218,12 +218,9 @@
         </template>
       </div>
     </div>
-    <div
-      class="prompter prompter-message"
-      x-show="data.prompter.message"
-      x-text="data.prompter.message"
-      @click="promptClear()"
-    ></div>
+    <div class="prompter prompter-message" x-show="data.prompter.message" @click="promptClear()">
+      <span x-text="data.prompter.message"></span>
+    </div>
 
     <dialog open x-show="showSetupModal">
       <article>

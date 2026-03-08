@@ -209,19 +209,24 @@ details summary {
   overflow: hidden;
 }
 .prompter-message {
-  font-size: 2.4rem;
+  font-size: 3.815rem;
   font-weight: 700;
   text-align: center;
   text-transform: uppercase;
   white-space: pre-wrap;
   color: #000;
-  background: #ddd;
+  background: #c2c9d6;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 3;
   cursor: pointer;
   user-select: none;
+}
+@media (max-aspect-ratio: 1/1) {
+  .prompter-message > span {
+    transform: rotate(-90deg);
+  }
 }
 
 .town-square article {
